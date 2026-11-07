@@ -31,10 +31,6 @@ def segmentar(frame):
     return mascara
 
 
-def _circularidad(c):
-    a, p = cv2.contourArea(c), cv2.arcLength(c, True)
-    return 4 * np.pi * a / (p * p) if p > 0 else 0.0
-
 
 def detectar_monedas(frame):
     """Devuelve lista de (x, y, radio_px) para cada moneda."""
@@ -136,7 +132,7 @@ def dibujar(frame, resultados, total):
 MODO = "imagen"            # "imagen" para probar con la foto, "webcam" para directo
 
 if MODO == "imagen":
-    frame = cv2.imread("monedas5.jpg")
+    frame = cv2.imread("moneda4.jpg")
     cv2.imshow("mascara", segmentar(frame))
     resultados, total, escala = procesar_frame(frame)
     print(f"Escala estimada: {escala:.2f} px/mm | Total: {total:.2f} EUR")

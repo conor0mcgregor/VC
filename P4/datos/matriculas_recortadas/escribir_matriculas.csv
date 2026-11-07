@@ -1,0 +1,68 @@
+﻿recorte;split;dificultad;matricula_a_escribir;seguridad;notas
+15989862207427.png;train;facil;0478LFR;alta;
+1637067480508.png;train;facil;3685HDP;alta;
+16488802684311.png;test;facil;8878LWB;alta;
+3.png;valid;facil;4810FYN;alta;
+4.png;train;facil;1049LDV;alta;
+5.png;train;facil;5025JJM;alta;
+7.png;train;facil;1104CZK;revisar;"punto entre digitos: ruido; leido como 1104"
+8.png;train;facil;4577JNF;alta;
+CNP2309AW.png;train;facil;CNP2309AW;alta;formato antiguo o especial
+Coches-mas-vendidos-Espana-2018.png;train;facil;0310RCU;alta;
+como-saber-que-ano-es-tu-coche-matricula.png;train;facil;0019GVM;alta;
+GC4370BV_0.png;train;dificil;GC4370BV;alta;formato antiguo o especial
+GC4370BV_1.png;train;dificil;0635LYZ;alta;
+GR5101AT.png;test;dificil;GR5101AT;alta;formato antiguo o especial
+Imagen-de-WhatsApp-2022-11-14-a-las-09-52-21.png;train;facil;4041LHK;alta;
+Imagen-de-WhatsApp-2022-11-14-a-las-09-52-23.png;train;facil;GC4905BV;alta;formato antiguo o especial
+imagen8709_NM8710_MG7782316.png;train;facil;2021AXP;alta;
+IMG-20221114-WA0072.png;train;facil;0239GLK;alta;
+IMG-20221114-WA0073.png;train;facil;7470GVH;revisar;"el cuarto caracter parece Q pero no existe Q en España; leido como 0"
+IMG-20221114-WA0074.png;train;facil;6631KWY;alta;
+IMG-20221114-WA0075.png;train;facil;4511HTH;alta;
+IMG-20221114-WA0076.png;test;facil;4597HXL;alta;
+IMG-20221114-WA0077.png;valid;facil;8433LTC;alta;
+IMG-20221114-WA0078.png;valid;facil;0063HSJ;alta;
+IMG-20221114-WA0079.png;valid;facil;3343DYL;alta;
+IMG-20221114-WA0080.png;train;facil;5930FMT;alta;
+IMG-20221114-WA0081.png;train;facil;2496BTM;alta;
+IMG-20221114-WA0082.png;train;dificil;5670JKF;revisar;imagen borrosa
+IMG-20221114-WA0083.png;train;facil;4138KFK;alta;
+IMG-20221114-WA0084.png;train;facil;5791FTD;alta;
+IMG-20221114-WA0085.png;train;facil;0635LYZ;alta;
+IMG-20221114-WA0086.png;valid;facil;9556KTR;alta;
+IMG-20221114-WA0087.png;train;facil;7484HWF;alta;
+IMG-20221114-WA0088.png;valid;facil;6656JPW;alta;
+IMG-20221114-WA0089.png;train;facil;0523HNF;alta;
+IMG-20221114-WA0090.png;train;facil;4103HMX;alta;
+IMG-20221114-WA0091.png;train;facil;GC2670CM;alta;formato antiguo o especial
+IMG-20221114-WA0092.png;train;facil;8686LLJ;alta;
+IMG-20221114-WA0093.png;train;dificil;9311BMF;revisar;muy borrosa, letras BMF inciertas
+IMG-20221114-WA0094.png;valid;facil;3587KSG;alta;
+IMG-20221114-WA0095.png;train;facil;0849GSD;alta;
+IMG-20221114-WA0096.png;valid;facil;1805GTP;alta;
+IMG-20221114-WA0097.png;train;facil;9160JBM;alta;
+IMG-20221114-WA0098.png;train;facil;9780HCF;alta;
+IMG-20221114-WA0099.png;train;facil;1268CDN;alta;
+IMG20221114082327_0.png;train;dificil;7430HNM;alta;
+IMG20221114082327_1.png;train;dificil;7110FPJ;alta;
+IMG20221114082331.png;valid;facil;7430HNM;alta;
+IMG20221114082335.png;train;facil;7110FPJ;alta;
+IMG20221114082338_0.png;valid;dificil;7927JHX;revisar;desenfocada
+IMG20221114082338_1.png;valid;dificil;6401DWL;revisar;algo borrosa
+IMG20221114113754.png;train;facil;8916BDG;alta;
+IMG20221114113800.png;train;facil;4324KRD;alta;
+IMG20221114113807.png;test;facil;2465DYD;alta;
+IMG20221114113823.png;train;facil;3821GYG;alta;
+IMG20221114113830.png;train;facil;0674BZH;alta;
+IMG20221114113836.png;train;facil;3027LMJ;alta;
+IMG20221114113843.png;train;facil;4928JBF;alta;
+IMG20221114113849.png;valid;facil;9074FYM;alta;
+IMG20221114113902.png;train;facil;6352LNB;alta;
+IMG20221114113915.png;train;facil;GC8300CB;alta;formato antiguo o especial
+IMG20221114113931.png;train;facil;8590LYT;alta;
+IMG20221114113935.png;train;facil;1336FLG;alta;
+IMG20221114113948.png;valid;facil;4452HYG;alta;
+IMG20221114114128.png;train;facil;0083CPC;alta;
+IMG20221115153655.png;valid;facil;0182GKT;alta;
+prueba-peugeot-308-hybrid-phev-2_mid6359518109bdc.png;train;facil;9729LTL;alta;

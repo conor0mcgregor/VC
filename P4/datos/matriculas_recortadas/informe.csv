@@ -1,0 +1,218 @@
+split,imagen,matricula,ancho_px,nitidez,caja,dificultad,motivos,recorte
+train,0041LZN_jpg.rf.0e4d1f77bd6dc2889eed9a7c0e7bdc43.jpg,0041LZN,361,350,0,dificil,proporción 1.45 fuera de rango (placa girada o caja errónea),0041LZN.png
+train,0129KMK_jpg.rf.bc3773a695e96b42c9ef258d676a53f4.jpg,0129KMK,811,101,0,facil,,0129KMK.png
+train,0192DSP_jpg.rf.3a2f12900810948366dbe4b2f7c46230.jpg,0192DSP,605,343,0,dificil,proporción 1.57 fuera de rango (placa girada o caja errónea),0192DSP.png
+train,0195JHM_jpg.rf.6cf430c246c89b669671d1b1e5db2aa2.jpg,0195JHM,297,349,0,facil,,0195JHM.png
+train,0225JWL_jpg.rf.050bb5b01be4bc617eb3d754dde3d7f8.jpg,0225JWL,936,23,0,dificil,nitidez 23 < 60,0225JWL.png
+train,0226MPP_jpg.rf.bc587e6b136fee2d20e52acedd9027a2.jpg,0226MPP,729,602,0,facil,,0226MPP.png
+train,0278KXW_jpg.rf.887f19b20e2baf41a7086e61e10664fe.jpg,0278KXW,302,753,0,facil,,0278KXW.png
+train,0425KDK_jpg.rf.3e31f8cbd516b66a823fd0cbd14465cd.jpg,0425KDK,1363,51,0,dificil,nitidez 51 < 60,0425KDK.png
+train,0492MTT_jpg.rf.a3dcb71c08e0acf205cb0521879d8f70.jpg,0492MTT,288,386,0,facil,,0492MTT.png
+train,0560JDX_jpg.rf.d46d52d145f9de88c2af099bf8ce7eeb.jpg,0560JDX,1097,435,0,facil,,0560JDX.png
+train,0649DHS_jpg.rf.02f9bad3a0898a38e1ab117f9082696f.jpg,0649DHS,1065,635,0,facil,,0649DHS.png
+train,0802HFP_jpg.rf.b4551a00e275a22458f1d0cc2e3b3ae1.jpg,0802HFP,156,11271,0,facil,,0802HFP.png
+train,0804CZV_jpg.rf.d4360951785cf86d03bd2f4ed7a0b20a.jpg,0804CZV,374,314,0,facil,,0804CZV.png
+train,0874LNH_jpg.rf.4e1308d5b7bb75e73f6be2acb91b19a3.jpg,0874LNH,418,17,0,dificil,nitidez 17 < 60,0874LNH.png
+train,0907JRF_jpg.rf.74a2aee5e9862fb5a4a7b12287a1af7a.jpg,0907JRF,1113,260,0,facil,,0907JRF.png
+train,1072FRD_jpg.rf.7deba5691a9d3266c4ac8c8e4d3b8240.jpg,1072FRD,852,507,0,facil,,1072FRD.png
+train,1159FPG_jpg.rf.c6ee026f68ff32c64c174600c37f22e8.jpg,1159FPG,129,1580,0,facil,,1159FPG.png
+train,1319FSX_jpg.rf.c5e2d850ddfbe1530b56a9513c740ada.jpg,1319FSX,148,1111,0,facil,,1319FSX.png
+train,1426JVT_jpg.rf.b67adb72f287812af2e08368acac566a.jpg,1426JVT,234,846,0,facil,,1426JVT.png
+train,1498JBZ_jpg.rf.790fa4f2632500c94312db55b4367a49.jpg,1498JBZ,1031,511,0,facil,,1498JBZ.png
+train,1556GMZ_jpg.rf.0557c44578425f8834f5b1646ae45f97.jpg,1556GMZ,846,371,0,facil,,1556GMZ.png
+train,1565HTS_jpg.rf.28f964a9318ecb231652d025e5f7a588.jpg,1565HTS,1366,219,0,facil,,1565HTS.png
+train,15989862207427_jpg.rf.fa8d5adecc1b781055a94a98ade0d045.jpg,,167,2683,0,facil,,15989862207427.png
+train,1599DLB_jpg.rf.1b7f5a27c6c2ee021d029e1d504bb11f.jpg,1599DLB,432,263,0,facil,,1599DLB.png
+train,1612MHX_jpg.rf.b14d5df7ce15c1e2f44d82dde7d1543c.jpg,1612MHX,631,88,0,facil,,1612MHX.png
+train,1637067480508_jpg.rf.f280f07b79284c43d51800680de773d0.jpg,,560,320,0,facil,,1637067480508.png
+test,16488802684311_jpg.rf.e6727c633996d8479247fbd38bc42929.jpg,,145,5008,0,facil,,16488802684311.png
+train,1755JKV_jpeg.rf.865f4e02d5b4ce766b33fea8a894b223.jpg,1755JKV,571,93,0,facil,,1755JKV.png
+train,1819LPN_jpeg.rf.2898b44859dd8ed911e68761c7d9b927.jpg,1819LPN,397,317,0,dificil,proporción 1.52 fuera de rango (placa girada o caja errónea),1819LPN.png
+train,1855MHN_jpg.rf.37847aebe8f37996606334083cc353f9.jpg,1855MHN,935,123,0,facil,,1855MHN.png
+train,1949LLT_jpg.rf.e9ad6b55b071c612bca37b4dd0ee900c.jpg,1949LLT,306,213,0,facil,,1949LLT.png
+train,2153GYX_jpg.rf.c695593f26ca0ddae81e9d5dc6332889.jpg,2153GYX,871,825,0,facil,,2153GYX.png
+train,220LNW_jpg.rf.e6364249e9392c4fa59dc6df09b57506.jpg,2202LNW,548,48,0,dificil,nitidez 48 < 60,2202LNW.png
+train,2344KJP_jpg.rf.fc9c247fdbd2825c89c9a47846a6cd80.jpg,2344KJP,927,186,0,facil,,2344KJP.png
+test,2522LNH_jpg.rf.8d7c67f212b52f026373cfc7c717af6c.jpg,2522LNH,115,6850,0,dificil,varias cajas en la imagen,2522LNH_0.png
+test,2522LNH_jpg.rf.8d7c67f212b52f026373cfc7c717af6c.jpg,2522LNH,25,10278,1,dificil,ancho 25px < 100; varias cajas en la imagen,2522LNH_1.png
+train,2711LKN_jpg.rf.bb82cbf29a2b1ee4dc9a35433acbc7ca.jpg,2711LKN,154,1898,0,facil,,2711LKN.png
+train,2841LJX_jpg.rf.75b8f2d1f6bf42496fb427b25c1ece1d.jpg,2841LJX,530,586,0,dificil,proporción 1.12 fuera de rango (placa girada o caja errónea),2841LJX.png
+train,2885BKJ_jpg.rf.0cffa901bc3f0c3ca20caa679e351602.jpg,2885BKJ,961,17,0,dificil,nitidez 17 < 60,2885BKJ.png
+train,2942HFB_jpg.rf.8c9871f1d4b3fb04663a0129311b526a.jpg,2942HFB,135,11845,0,facil,,2942HFB.png
+train,2953JHW_jpg.rf.bb8bae488e396c2097c047625bee31a5.jpg,2953JHW,897,50,0,dificil,nitidez 50 < 60,2953JHW.png
+train,2956MJG_jpg.rf.4efa0547e3a7b84e9ad9a5324ef34249.jpg,2956MJG,788,447,0,facil,,2956MJG.png
+train,3046KWK_jpeg.rf.a00c36bc8d65d538a942828978c24db9.jpg,3046KWK,396,170,0,facil,,3046KWK.png
+train,3161LNC_jpg.rf.2d053252f3950ad88ecfc14cb248a15c.jpg,3161LNC,548,135,0,facil,,3161LNC.png
+train,3340JMF_jpg.rf.b7be6ab8a6d399cf975f8360b5848be8.jpg,3340JMF,1234,224,0,facil,,3340JMF.png
+train,3451LGB_jpg.rf.713e09454eec3281af4710b2dfaa6668.jpg,3451LGB,205,895,0,facil,,3451LGB.png
+train,3582LBT_jpeg.rf.f4c09d6b34e2561fe7737688194a800d.jpg,3582LBT,391,158,0,dificil,proporción 1.40 fuera de rango (placa girada o caja errónea),3582LBT.png
+train,3587DCX_jpg.rf.12eb4b28812c28266aeb14f85cd84a04.jpg,3587DCX,1076,397,0,facil,,3587DCX.png
+train,3587DCX_jpg.rf.15b6f7fc341c39a85e058fa461e1fc28.jpg,3587DCX,1350,346,0,facil,,3587DCX_foto2.png
+train,3660CRT_jpg.rf.2b62dec25acc52e17c307df664216578.jpg,3660CRT,1179,488,0,facil,,3660CRT.png
+train,3691MTY_jpg.rf.b6f8bedd51a083d633e30cd47fcbd1db.jpg,3691MTY,711,588,0,facil,,3691MTY.png
+train,3838KWB_jpg.rf.193cbab6a9020818f34c86df87814815.jpg,3838KWB,179,3820,0,facil,,3838KWB.png
+train,3964LXV__jpeg.rf.3e98c09b127989d6fd557f6492a86994.jpg,3964LXV,355,3010,0,dificil,proporción 1.57 fuera de rango (placa girada o caja errónea),3964LXV.png
+train,3964LXV_jpeg.rf.32ee07658b950c935af85f7a4c5afee7.jpg,3964LXV,1045,746,0,facil,,3964LXV_foto2.png
+valid,3_jpg.rf.bd7c9ceaf08ae09639491614d5635eb0.jpg,,274,2102,0,facil,,3.png
+train,4000GFL_jpg.rf.b22b30fe22d12a0318efc3e02488b52e.jpg,4000GFL,596,21,0,dificil,nitidez 21 < 60,4000GFL.png
+train,4078BVX_jpg.rf.4884d966c951ed36057c1d050ef67e90.jpg,4078BVX,221,873,0,dificil,varias cajas en la imagen,4078BVX_0.png
+train,4078BVX_jpg.rf.4884d966c951ed36057c1d050ef67e90.jpg,4078BVX,133,1447,1,dificil,varias cajas en la imagen,4078BVX_1.png
+train,4125DVF_jpg.rf.f2db84f91e08a6955a8e5dbc91e38c62.jpg,4125DVF,127,4273,0,facil,,4125DVF.png
+train,4181GWT_jpg.rf.e04a85d6bf12e8a7a4401575d9c53042.jpg,4181GWT,268,199,0,facil,,4181GWT.png
+train,4182KMG_jpg.rf.8b4d3293f7153577df76d909e2db230c.jpg,4182KMG,817,20,0,dificil,nitidez 20 < 60,4182KMG.png
+train,4481DKX_jpg.rf.e6a3018abdcd979ed046b13148907181.jpg,4481DKX,554,185,0,facil,,4481DKX.png
+train,4674FHC_jpg.rf.1ca6d35b702a05f1d608fbabe5a31ba2.jpg,4674FHC,939,297,0,facil,,4674FHC.png
+train,4674FHC_jpg.rf.abcb7fe149d634cd12b8fa372a6d223e.jpg,4674FHC,1335,156,0,facil,,4674FHC_foto2.png
+train,4757GSY_jpeg.rf.445bf9610c8156217af98f3e061d1c97.jpg,4757GSY,518,336,0,facil,,4757GSY.png
+test,4841LFS_jpg.rf.894c46b1f2698990df20a9e9b2a0a7d2.jpg,4841LFS,207,3044,0,facil,,4841LFS.png
+train,4950KZK_jpg.rf.570b581efcf14267728df940e3f192c0.jpg,4950KZK,369,2209,0,facil,,4950KZK.png
+train,4_jpg.rf.84525186e22e7fe8893fded001243366.jpg,,317,2638,0,facil,,4.png
+train,5052HLJ_jpg.rf.a990b61e01be777e5d388550b0728e96.jpg,5052HLJ,555,321,0,facil,,5052HLJ.png
+train,5172LTZ_jpg.rf.3d8732cc5a3d8e03ace1a5f006af5f6e.jpg,5172LTZ,795,862,0,facil,,5172LTZ.png
+train,5215HSH_jpg.rf.a00f28ec6506cdda3f0b8a4ab1e6ef50.jpg,5215HSH,458,300,0,facil,,5215HSH.png
+train,5215HXL_jpeg.rf.b4063360002c740f95218920a3fa4b0b.jpg,5215HXL,681,305,0,facil,,5215HXL.png
+valid,5239LSB_jpg.rf.5ef53b3d14523c3ed76e18b704fccbe9.jpg,5239LSB,341,244,0,facil,,5239LSB.png
+train,5240KSW_jpg.rf.a257b06c8784004de1479cee9c1b43c0.jpg,5240KSW,543,80,0,facil,,5240KSW.png
+train,5275HGY_jpg.rf.3722a31b9f1b4e53e51253fd592a6162.jpg,5275HGY,1081,152,0,facil,,5275HGY.png
+train,5275HGY_jpg.rf.51a106a5e26f293c963d7170067f2d55.jpg,5275HGY,1373,188,0,facil,,5275HGY_foto2.png
+train,5422MSY_jpeg.rf.53281bf8a6f4e3b9cd5ff4d9e54548e7.jpg,5422MSY,157,111,0,dificil,proporción 0.29 fuera de rango (placa girada o caja errónea),5422MSY.png
+train,5493DHZ_jpg.rf.0dd061a50e8bb80f637ebea0168f55ab.jpg,5493DHZ,478,132,0,dificil,proporción 1.01 fuera de rango (placa girada o caja errónea),5493DHZ.png
+train,5789JHB_jpg.rf.cf7d2486f7d52090faa30256a8f20616.jpg,5789JHB,912,338,0,facil,,5789JHB.png
+train,5796DKP_jpg.rf.345ca29d6e15731a8175f67eba8a92f3.jpg,5796DKP,937,617,0,facil,,5796DKP.png
+train,5796DKP_jpg.rf.846aeaa4166f86195ec315514222745d.jpg,5796DKP,1271,501,0,facil,,5796DKP_foto2.png
+train,5921LMH_jpg.rf.9703637363ad365f4b79e9d3f29e9dcc.jpg,5921LMH,114,3847,0,dificil,proporción 1.58 fuera de rango (placa girada o caja errónea),5921LMH.png
+train,5_jpg.rf.103d122aab361824ec6de538f5720a4b.jpg,,271,2756,0,facil,,5.png
+train,6005KFV_jpg.rf.8bf885b6736d80ed4a9174318c18d633.jpg,6005KFV,602,544,0,facil,,6005KFV.png
+train,6040DLX_jpg.rf.81ec33b9464368af6b55e1beae878d6b.jpg,6040DLX,554,275,0,facil,,6040DLX.png
+valid,6298KSN_jpg.rf.e712e89067d97749086fdfca75ebfcc3.jpg,6298KSN,128,5898,0,dificil,varias cajas en la imagen,6298KSN_0.png
+valid,6298KSN_jpg.rf.e712e89067d97749086fdfca75ebfcc3.jpg,6298KSN,85,7189,1,dificil,ancho 85px < 100; varias cajas en la imagen,6298KSN_1.png
+train,6299JJL_jpg.rf.5cbef3b882f1766430039d22f82b4e98.jpg,6299JJL,339,747,0,facil,,6299JJL.png
+train,6401JBX_jpg.rf.72828600bbb8ba707b81cdc3379ddc0b.jpg,6401JBX,1034,149,0,facil,,6401JBX.png
+train,6445HNP_jpg.rf.7ec9fe73c05fcd53568a0eeeac81a34a.jpg,6445HNP,965,29,0,dificil,nitidez 29 < 60,6445HNP.png
+train,6554BNX_jpg.rf.fc4806d5932058d075b595c6d4a1aa65.jpg,6554BNX,1095,426,0,facil,,6554BNX.png
+train,6704KNN_jpg.rf.baf80ac493efdcc9e7165f9ba9581ba9.jpg,6704KNN,151,1075,0,facil,,6704KNN.png
+train,6775BNF_jpg.rf.d7146eecf4da86f800b413cb61b0d7c3.jpg,6775BNF,847,82,0,facil,,6775BNF.png
+train,6929LKK_jpg.rf.3a907c890566efc431bb4e9e2667ee75.jpg,6929LKK,1004,484,0,facil,,6929LKK.png
+train,7153JWD_jpg.rf.0c51cad31f4d834c9eeaf0da28f0b4c0.jpg,7153JWD,1256,155,0,facil,,7153JWD.png
+train,7254LJJ_jpg.rf.8a393698be927a3d503e7c77bd681f03.jpg,7254LJJ,917,53,0,dificil,nitidez 53 < 60,7254LJJ.png
+train,7270GVF_jpg.rf.dc41300b9cb493aa670465d49a417934.jpg,7270GVF,305,644,0,facil,,7270GVF.png
+train,7318GSB_jpg.rf.ddc54e0cab1b66d2aad799b9f60a9d5b.jpg,7318GSB,475,229,0,facil,,7318GSB.png
+train,7332JKC_jpg.rf.67ae170c79954688df3b9a400869f5cf.jpg,7332JKC,295,1781,0,facil,,7332JKC.png
+train,7746KBG_jpg.rf.8d7ba98bde25354acadb625ed823b40a.jpg,7746KBG,425,126,0,facil,,7746KBG.png
+train,7963KNH_jpg.rf.3f068891be5575852eff214e50c226a3.jpg,7963KNH,994,33,0,dificil,nitidez 33 < 60,7963KNH.png
+train,7_jpg.rf.0afeea86e3e0ee8250d6fa815b6b72b6.jpg,,305,192,0,facil,,7.png
+train,8014LXF_jpeg.rf.168cdbc9467a006e8cea8e30ec2d8b55.jpg,8014LXF,293,376,0,facil,,8014LXF.png
+test,8168GJG_jpg.rf.df204b90eeb562a4745fa24eb6ebdb6c.jpg,8168GJG,188,5234,0,facil,,8168GJG.png
+train,8597FSC_jpg.rf.bcb14fd07dbab6bbbdd8fd1922136d0e.jpg,8597FSC,477,137,0,facil,,8597FSC.png
+train,8691KPN_jpg.rf.a63a1b98de79f036c0903d784bbf00a6.jpg,8691KPN,353,269,0,facil,,8691KPN.png
+test,8712HJG_jpg.rf.1a17ba6428d7680e780f9607cbc5db08.jpg,8712HJG,123,9189,0,facil,,8712HJG.png
+train,8727JTC_jpg.rf.bf06c978cc2f0d6b9a9285168e147816.jpg,8727JTC,1307,211,0,facil,,8727JTC.png
+train,8727JTC_jpg.rf.dc7bfed7b349d4596bf891430fdbbab8.jpg,8727JTC,872,257,0,facil,,8727JTC_foto2.png
+train,8778LVY_jpg.rf.c484d73ca50834f0387fc3b7ef07aa50.jpg,8778LVY,425,482,0,facil,,8778LVY.png
+valid,8903KPT_jpg.rf.1269228b0bf96fadd4c4041dd718f59f.jpg,8903KPT,77,7722,0,dificil,ancho 77px < 100; varias cajas en la imagen,8903KPT_0.png
+valid,8903KPT_jpg.rf.1269228b0bf96fadd4c4041dd718f59f.jpg,8903KPT,42,7008,1,dificil,ancho 42px < 100; varias cajas en la imagen,8903KPT_1.png
+train,8953JXP_jpeg.rf.f0dbf71f2bcd13bb9bf5460a0f13a64f.jpg,8953JXP,953,581,0,facil,,8953JXP.png
+train,8_jpg.rf.377bfcec15ddecab3727116b9b0176bd.jpg,,188,3736,0,facil,,8.png
+train,9063MPD_jpg.rf.c95f825953ae7d6d12d914ed9b3aa753.jpg,9063MPD,638,976,0,dificil,proporción 7.78 fuera de rango (placa girada o caja errónea),9063MPD.png
+train,9395MSB_jpg.rf.54006cf78a31ed41523ba5bb54c6a123.jpg,9395MSB,993,461,0,facil,,9395MSB.png
+train,9498LCN_jpg.rf.314b33249b10c2729a7d9d8043844a24.jpg,9498LCN,91,4981,0,dificil,ancho 91px < 100,9498LCN.png
+train,9532GVC-n_jpg.rf.44e50dcf42b8ec8ad926d70eee9d31d0.jpg,9532GVC,904,51,0,dificil,nitidez 51 < 60,9532GVC.png
+train,9542KDC_jpg.rf.3250ab9caacbed9bc3eaa1043065932d.jpg,9542KDC,430,105,0,facil,,9542KDC.png
+train,9603LFP_jpg.rf.258dab4b64053b677590ee8aacf4b027.jpg,9603LFP,778,105,0,facil,,9603LFP.png
+train,9603MPD_jpg.rf.4350ae2988890b0d46568325f3b1092a.jpg,9603MPD,735,841,0,facil,,9603MPD.png
+train,9786KTP_jpeg.rf.e7beb902ff86edb2c0c0b9f91e1a7c70.jpg,9786KTP,855,539,0,facil,,9786KTP.png
+train,9883GTM_jpg.rf.d48279c8eb5b0864001fc9e11308180c.jpg,9883GTM,1460,94,0,facil,,9883GTM.png
+train,CNP2309AW_jpg.rf.cd8e5c1f516c29001ae230c0942850bb.jpg,,179,1298,0,facil,,CNP2309AW.png
+train,Coches-mas-vendidos-Espana-2018_jpg.rf.91a1fe07bd397e7811ce35306db75b53.jpg,,103,8028,0,facil,,Coches-mas-vendidos-Espana-2018.png
+train,como-saber-que-ano-es-tu-coche-matricula_jpg.rf.0fb26738cce069eee4fdd153cc4e844e.jpg,,363,1378,0,facil,,como-saber-que-ano-es-tu-coche-matricula.png
+train,GC4370BV_jpg.rf.a67b369389949e6ebe62107a65058e9e.jpg,,171,2053,0,dificil,varias cajas en la imagen,GC4370BV_0.png
+train,GC4370BV_jpg.rf.a67b369389949e6ebe62107a65058e9e.jpg,,117,1733,1,dificil,varias cajas en la imagen,GC4370BV_1.png
+test,GR5101AT_jpg.rf.9e752e07ffd384a48d87309fe8d24427.jpg,,57,13568,0,dificil,ancho 57px < 100,GR5101AT.png
+train,Imagen-de-WhatsApp-2022-11-14-a-las-09-52-21_jpg.rf.fe4e7f6fee627823d84135291200c57f.jpg,,395,2304,0,facil,,Imagen-de-WhatsApp-2022-11-14-a-las-09-52-21.png
+train,Imagen-de-WhatsApp-2022-11-14-a-las-09-52-23_jpg.rf.4f1c96fde4875c710834fa3684180e3c.jpg,,296,2471,0,facil,,Imagen-de-WhatsApp-2022-11-14-a-las-09-52-23.png
+train,imagen8709_NM8710_MG7782316_jpeg.rf.284c1459456f5041450c08bdc9edd053.jpg,,150,3295,0,facil,,imagen8709_NM8710_MG7782316.png
+train,IMG-20221114-WA0072_jpg.rf.1b50f6c5e84740d5110bbf041b7911da.jpg,,197,4047,0,facil,,IMG-20221114-WA0072.png
+train,IMG-20221114-WA0073_jpg.rf.999de0ca249ef33148690f998929bbbc.jpg,,120,7413,0,facil,,IMG-20221114-WA0073.png
+train,IMG-20221114-WA0074_jpg.rf.15573b78fdbd96188f4f7b32204e2179.jpg,,141,1894,0,facil,,IMG-20221114-WA0074.png
+train,IMG-20221114-WA0075_jpg.rf.6c53e3a57ff31b303cb7c77fbe19d7b5.jpg,,108,9320,0,facil,,IMG-20221114-WA0075.png
+test,IMG-20221114-WA0076_jpg.rf.c28100ed851a10f63331b5c96eea7e2f.jpg,,180,2888,0,facil,,IMG-20221114-WA0076.png
+valid,IMG-20221114-WA0077_jpg.rf.5f99f69604d54fa133608344d47114ba.jpg,,180,4502,0,facil,,IMG-20221114-WA0077.png
+valid,IMG-20221114-WA0078_jpg.rf.32aed73f3815edad17162cd08c1cee92.jpg,,220,4334,0,facil,,IMG-20221114-WA0078.png
+valid,IMG-20221114-WA0079_jpg.rf.d41b4e2387d66cd8bd0cabbd4bad361f.jpg,,201,2881,0,facil,,IMG-20221114-WA0079.png
+train,IMG-20221114-WA0080_jpg.rf.0a7463454944fb687f78509f2dd836a0.jpg,,192,3214,0,facil,,IMG-20221114-WA0080.png
+train,IMG-20221114-WA0081_jpg.rf.9daaf2ca5ea86e5de83fa82d0806f309.jpg,,214,3285,0,facil,,IMG-20221114-WA0081.png
+train,IMG-20221114-WA0082_jpg.rf.f7475a9dd77a714dd9d4bde9ca4512cb.jpg,,72,6585,0,dificil,ancho 72px < 100,IMG-20221114-WA0082.png
+train,IMG-20221114-WA0083_jpg.rf.21724b075bdaea9aeb76a04d417a963d.jpg,,194,9868,0,facil,,IMG-20221114-WA0083.png
+train,IMG-20221114-WA0084_jpg.rf.8f955a89ba7c0269086ccf4688524bff.jpg,,330,1438,0,facil,,IMG-20221114-WA0084.png
+train,IMG-20221114-WA0085_jpg.rf.614d5fa2746ecbdee6483f6a5baebf73.jpg,,177,2969,0,facil,,IMG-20221114-WA0085.png
+valid,IMG-20221114-WA0086_jpg.rf.2548a4560155340dc31ee217ddecb383.jpg,,196,3846,0,facil,,IMG-20221114-WA0086.png
+train,IMG-20221114-WA0087_jpg.rf.a950d303df3edf147df577f924076fcf.jpg,,157,2098,0,facil,,IMG-20221114-WA0087.png
+valid,IMG-20221114-WA0088_jpg.rf.8fd4576e4dfef538bb28ebf4a97f9e5e.jpg,,168,2115,0,facil,,IMG-20221114-WA0088.png
+train,IMG-20221114-WA0089_jpg.rf.0dd7a7b809af7c261229025985a60354.jpg,,152,3912,0,facil,,IMG-20221114-WA0089.png
+train,IMG-20221114-WA0090_jpg.rf.bca868fe5d64a8c662ea69913abef1ad.jpg,,227,4428,0,facil,,IMG-20221114-WA0090.png
+train,IMG-20221114-WA0091_jpg.rf.dc2f8b6ea54942ca9f78f532e3291d08.jpg,,207,6561,0,facil,,IMG-20221114-WA0091.png
+train,IMG-20221114-WA0092_jpg.rf.b7b2e7f4fb3b7fd310237b56a9ae003e.jpg,,220,2663,0,facil,,IMG-20221114-WA0092.png
+train,IMG-20221114-WA0093_jpg.rf.ea78ceaf4f6eaf47efeccd8f4d30993a.jpg,,72,3580,0,dificil,ancho 72px < 100,IMG-20221114-WA0093.png
+valid,IMG-20221114-WA0094_jpg.rf.1777993e2b51bdcae5c1ba99d3242378.jpg,,180,6424,0,facil,,IMG-20221114-WA0094.png
+train,IMG-20221114-WA0095_jpg.rf.b44e7e31174311e2006080e85e1f309f.jpg,,110,9579,0,facil,,IMG-20221114-WA0095.png
+valid,IMG-20221114-WA0096_jpg.rf.e9cc78b30abd3158ffbe727fe7e83011.jpg,,335,4015,0,facil,,IMG-20221114-WA0096.png
+train,IMG-20221114-WA0097_jpg.rf.716b50218427e8b62725ce4eb2019c06.jpg,,191,3452,0,facil,,IMG-20221114-WA0097.png
+train,IMG-20221114-WA0098_jpg.rf.6c707d7d45570163d389363ba97664ad.jpg,,161,3096,0,facil,,IMG-20221114-WA0098.png
+train,IMG-20221114-WA0099_jpg.rf.524cbe53d8708e6c7982b9ced1ee8f19.jpg,,252,3833,0,facil,,IMG-20221114-WA0099.png
+train,IMG20221114082327_jpg.rf.cf259622ad6cb086103f23cf220e912e.jpg,,327,1290,0,dificil,varias cajas en la imagen,IMG20221114082327_0.png
+train,IMG20221114082327_jpg.rf.cf259622ad6cb086103f23cf220e912e.jpg,,220,2063,1,dificil,varias cajas en la imagen,IMG20221114082327_1.png
+valid,IMG20221114082331_jpg.rf.729418373efbb15b1cfabc1fdeee7381.jpg,,759,169,0,facil,,IMG20221114082331.png
+train,IMG20221114082335_jpg.rf.cbd1bbbaaa046ecfb06a2bd7c7554e3d.jpg,,645,211,0,facil,,IMG20221114082335.png
+valid,IMG20221114082338_jpg.rf.e53f465db3f402bc8499734b05a8a7fc.jpg,,387,365,0,dificil,varias cajas en la imagen,IMG20221114082338_0.png
+valid,IMG20221114082338_jpg.rf.e53f465db3f402bc8499734b05a8a7fc.jpg,,272,384,1,dificil,varias cajas en la imagen,IMG20221114082338_1.png
+train,IMG20221114113754_jpg.rf.74f45819813391baecb4466d0b7fbf06.jpg,,558,1234,0,facil,,IMG20221114113754.png
+train,IMG20221114113800_jpg.rf.f11319ed862256abc08646f3aeaf245c.jpg,,573,1706,0,facil,,IMG20221114113800.png
+test,IMG20221114113807_jpg.rf.bb7dd9588a1bc62741f96567e8745b15.jpg,,734,1388,0,facil,,IMG20221114113807.png
+train,IMG20221114113823_jpg.rf.7de55896d3ec23110bd434a1625d237e.jpg,,552,911,0,facil,,IMG20221114113823.png
+train,IMG20221114113830_jpg.rf.d75149b49a9ef6f280d9a082fb9cc06a.jpg,,757,530,0,facil,,IMG20221114113830.png
+train,IMG20221114113836_jpg.rf.d7ad554b8dec3dfe9ef68948a086f136.jpg,,573,1006,0,facil,,IMG20221114113836.png
+train,IMG20221114113843_jpg.rf.1dd42f90d3be1f0910c16854efbb4e2a.jpg,,789,1234,0,facil,,IMG20221114113843.png
+valid,IMG20221114113849_jpg.rf.68491bdd59639a6f2a2b6c081580aa2a.jpg,,707,818,0,facil,,IMG20221114113849.png
+train,IMG20221114113902_jpg.rf.c41bb8eff0163c1204f48b854a4ec3b4.jpg,,960,311,0,facil,,IMG20221114113902.png
+train,IMG20221114113915_jpg.rf.78c19e1dee442feb43491265ffd30dba.jpg,,673,1008,0,facil,,IMG20221114113915.png
+train,IMG20221114113931_jpg.rf.fac5b426a419f06ba351a0fbf5962ca9.jpg,,553,1134,0,facil,,IMG20221114113931.png
+train,IMG20221114113935_jpg.rf.7380aebafa929c925bf8735369945d8d.jpg,,1131,419,0,facil,,IMG20221114113935.png
+valid,IMG20221114113948_jpg.rf.050f6220e9f097969ce76a6ed662a427.jpg,,883,329,0,facil,,IMG20221114113948.png
+train,IMG20221114114128_jpg.rf.569590a35dddff1e9215b805b94761f5.jpg,,858,433,0,facil,,IMG20221114114128.png
+valid,IMG20221115153655_jpg.rf.05f111c2b94f5c4cc8786b4dcd04491e.jpg,,546,224,0,facil,,IMG20221115153655.png
+train,prueba-peugeot-308-hybrid-phev-2_mid6359518109bdc_jpg.rf.aba9a903e917b34cf1dff06eb7211427.jpg,,109,4890,0,facil,,prueba-peugeot-308-hybrid-phev-2_mid6359518109bdc.png
+valid,0182GLK_jpg.rf.25cd001e8b3a31df0210d8b006aac0b6.jpg,0182GLK,1001,241,0,facil,,0182GLK.png
+valid,0304FWK_jpg.rf.e2a86135bfe8d74693d1f785bf288f18.jpg,0304FWK,326,380,0,facil,,0304FWK.png
+valid,1310MPK_jpg.rf.5f16b336a5fb3fb885a01c33c6bd0741.jpg,1310MPK,139,449,0,facil,,1310MPK.png
+valid,1339MMS_jpg.rf.1e2413cc8bbac13876de34e792b7609b.jpg,1339MMS,722,95,0,facil,,1339MMS.png
+valid,5004MGB_jpg.rf.95b9e1fb3acfdebcadd3d74ab7f6203b.jpg,5004MGB,195,135,0,dificil,proporción 0.94 fuera de rango (placa girada o caja errónea),5004MGB.png
+valid,5488LKV_jpg.rf.dd414dedd9f92852a5cf925d3733f2cc.jpg,5488LKV,1463,160,0,facil,,5488LKV.png
+valid,6222JWN_jpg.rf.bc7c17b83765513063c03625f2d78793.jpg,6222JWN,634,52,0,dificil,nitidez 52 < 60,6222JWN.png
+valid,6688KSW_jpg.rf.c80dec5b7625e84ac62a61e96cf9aac5.jpg,6688KSW,931,636,0,facil,,6688KSW.png
+valid,8555JKG_jpg.rf.01533f0b0874b9cf39259053c5d6ee7b.jpg,8555JKG,938,149,0,facil,,8555JKG.png
+valid,8970GZR_jpg.rf.333cb95071ce5dfa5829faa3c7101893.jpg,8970GZR,522,220,0,facil,,8970GZR.png
+valid,9075MDZ_jpg.rf.1bcbb1ab3ab71c8361a338d34ea21a80.jpg,9075MDZ,584,893,0,facil,,9075MDZ.png
+valid,9247CZG_jpg.rf.f7732d9f02396e320d3fedebd1e0b12a.jpg,9247CZG,1289,386,0,facil,,9247CZG.png
+test,0550HNN_jpg.rf.b31a2d3200fee9ff2f3dbd5f69b0728f.jpg,0550HNN,193,1325,0,facil,,0550HNN.png
+test,1062FNT_jpg.rf.a854a9347738e3ee29b518dd3befd82c.jpg,1062FNT,1434,565,0,facil,,1062FNT.png
+test,1111LRB_jpg.rf.56da55464c8dad4d54c7a81b22eb8dd7.jpg,1111LRB,719,179,0,facil,,1111LRB.png
+test,2929KXJ_jpg.rf.7513a53bf4dc89ca23d1c71d37103aca.jpg,2929KXJ,1218,235,0,facil,,2929KXJ.png
+test,3044JMB_jpg.rf.819383bac92e44e1d982c8fcdfbec27d.jpg,3044JMB,929,635,0,facil,,3044JMB.png
+test,3076CCV_jpg.rf.01f15f631124279cf3266c811f61f9dc.jpg,3076CCV,125,2168,0,facil,,3076CCV.png
+test,3497BYY_jpg.rf.1f5f4c4f997e2198fce1c02c82350f4b.jpg,3497BYY,330,449,0,facil,,3497BYY.png
+test,3929GVS_jpg.rf.3cb73543fe44d6242e4c2f9df3e13ba1.jpg,3929GVS,261,1277,0,facil,,3929GVS.png
+test,4283DJR_jpg.rf.bb750081a5552aaf9688ef27dd3b2fec.jpg,4283DJR,1143,482,0,facil,,4283DJR.png
+test,4373KYG_jpg.rf.27aee4fd55d62162b7cfbb0efe79213b.jpg,4373KYG,480,236,0,facil,,4373KYG.png
+test,5240BFM_jpg.rf.c30084bff6001be31ba5688196644f49.jpg,5240BFM,454,309,0,facil,,5240BFM.png
+test,5816FWG_jpg.rf.fc499ebd7214c96cfd5cac554b82ffa6.jpg,5816FWG,539,12,0,dificil,nitidez 12 < 60,5816FWG.png
+test,6000GVT_jpg.rf.043ab8e57c9077b2016cb05141255d37.jpg,6000GVT,1256,269,0,facil,,6000GVT.png
+test,6072HBJ_jpg.rf.34a415b578298ea3cff045ce2cdccd1b.jpg,6072HBJ,368,554,0,facil,,6072HBJ.png
+test,6230FXF_jpg.rf.e80a761a8593b68ad2bd8bf5ca77184b.jpg,6230FXF,143,1636,0,facil,,6230FXF.png
+test,6556KKH_jpg.rf.31a27aa6cfd4b29241f00b20530267f1.jpg,6556KKH,790,204,0,facil,,6556KKH.png
+test,7007KFD_jpg.rf.ba5bfaf31aa2d66e677343491151ec56.jpg,7007KFD,194,1059,0,facil,,7007KFD.png
+test,7067KSH_jpg.rf.ff1a85e61faf1d3ee19d6c22dc234128.jpg,7067KSH,1318,321,0,facil,,7067KSH.png
+test,7469JYS_jpeg.rf.6d6f98bae10924333cb1540224f7610b.jpg,7469JYS,596,437,0,facil,,7469JYS.png
+test,8120GLL_jpg.rf.c5acf33710330c44ccc23d428906784c.jpg,8120GLL,827,667,0,facil,,8120GLL.png
+test,9869KST_jpg.rf.414795f9cf3d0a24360ae1187c5170c6.jpg,9869KST,211,823,0,facil,,9869KST.png
+test,9892JFR_jpg.rf.d611cd1b8cabe6a61d2eec61d8c23256.jpg,9892JFR,1159,485,0,facil,,9892JFR.png
+test,9961HDK_jpeg.rf.5de923a3f58b65f7935de508b5cb6df2.jpg,9961HDK,458,570,0,facil,,9961HDK.png

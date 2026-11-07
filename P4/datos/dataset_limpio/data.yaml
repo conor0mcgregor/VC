@@ -1,0 +1,15 @@
+# Sin "path": Ultralytics toma la carpeta de este fichero, así que funciona en cualquier equipo
+train: train/images
+val: valid/images
+test: test/images
+
+nc: 1
+names: ['License Plate']
+
+# Origen: dos exports de Roboflow combinados y revisados a mano (ver README.md)
+roboflow:
+  workspace: joel-morera-apaza
+  project: total-license-plates-7qovs
+  version: 1
+  license: CC BY 4.0
+  url: https://app.roboflow.com/joel-morera-apaza/total-license-plates-7qovs/1

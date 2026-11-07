@@ -1,0 +1,218 @@
+﻿ruta_recorte;split;matricula;formato;dificultad;origen_texto;seguridad_texto;ancho_px;nitidez;motivos_dificultad
+todas/0041LZN.png;train;0041LZN;actual;dificil;nombre_archivo;alta;361;350;proporción 1.45 fuera de rango (placa girada o caja errónea)
+todas/0129KMK.png;train;0129KMK;actual;facil;nombre_archivo;alta;811;101;
+todas/0192DSP.png;train;0192DSP;actual;dificil;nombre_archivo;alta;605;343;proporción 1.57 fuera de rango (placa girada o caja errónea)
+todas/0195JHM.png;train;0195JHM;actual;facil;nombre_archivo;alta;297;349;
+todas/0225JWL.png;train;0225JWL;actual;dificil;nombre_archivo;alta;936;23;nitidez 23 < 60
+todas/0226MPP.png;train;0226MPP;actual;facil;nombre_archivo;alta;729;602;
+todas/0278KXW.png;train;0278KXW;actual;facil;nombre_archivo;alta;302;753;
+todas/0425KDK.png;train;0425KDK;actual;dificil;nombre_archivo;alta;1363;51;nitidez 51 < 60
+todas/0492MTT.png;train;0492MTT;actual;facil;nombre_archivo;alta;288;386;
+todas/0560JDX.png;train;0560JDX;actual;facil;nombre_archivo;alta;1097;435;
+todas/0649DHS.png;train;0649DHS;actual;facil;nombre_archivo;alta;1065;635;
+todas/0802HFP.png;train;0802HFP;actual;facil;nombre_archivo;alta;156;11271;
+todas/0804CZV.png;train;0804CZV;actual;facil;nombre_archivo;alta;374;314;
+todas/0874LNH.png;train;0874LNH;actual;dificil;nombre_archivo;alta;418;17;nitidez 17 < 60
+todas/0907JRF.png;train;0907JRF;actual;facil;nombre_archivo;alta;1113;260;
+todas/1072FRD.png;train;1072FRD;actual;facil;nombre_archivo;alta;852;507;
+todas/1159FPG.png;train;1159FPG;actual;facil;nombre_archivo;alta;129;1580;
+todas/1319FSX.png;train;1319FSX;actual;facil;nombre_archivo;alta;148;1111;
+todas/1426JVT.png;train;1426JVT;actual;facil;nombre_archivo;alta;234;846;
+todas/1498JBZ.png;train;1498JBZ;actual;facil;nombre_archivo;alta;1031;511;
+todas/1556GMZ.png;train;1556GMZ;actual;facil;nombre_archivo;alta;846;371;
+todas/1565HTS.png;train;1565HTS;actual;facil;nombre_archivo;alta;1366;219;
+todas/15989862207427.png;train;0478LFR;actual;facil;lectura_manual;alta;167;2683;
+todas/1599DLB.png;train;1599DLB;actual;facil;nombre_archivo;alta;432;263;
+todas/1612MHX.png;train;1612MHX;actual;facil;nombre_archivo;alta;631;88;
+todas/1637067480508.png;train;3685HDP;actual;facil;lectura_manual;alta;560;320;
+todas/16488802684311.png;test;8878LWB;actual;facil;lectura_manual;alta;145;5008;
+todas/1755JKV.png;train;1755JKV;actual;facil;nombre_archivo;alta;571;93;
+todas/1819LPN.png;train;1819LPN;actual;dificil;nombre_archivo;alta;397;317;proporción 1.52 fuera de rango (placa girada o caja errónea)
+todas/1855MHN.png;train;1855MHN;actual;facil;nombre_archivo;alta;935;123;
+todas/1949LLT.png;train;1949LLT;actual;facil;nombre_archivo;alta;306;213;
+todas/2153GYX.png;train;2153GYX;actual;facil;nombre_archivo;alta;871;825;
+todas/2202LNW.png;train;2202LNW;actual;dificil;nombre_archivo;alta;548;48;nitidez 48 < 60
+todas/2344KJP.png;train;2344KJP;actual;facil;nombre_archivo;alta;927;186;
+todas/2522LNH_0.png;test;2522LNH;actual;dificil;nombre_archivo;alta;115;6850;varias cajas en la imagen
+todas/2522LNH_1.png;test;2522LNH;actual;dificil;nombre_archivo;alta;25;10278;"ancho 25px < 100; varias cajas en la imagen"
+todas/2711LKN.png;train;2711LKN;actual;facil;nombre_archivo;alta;154;1898;
+todas/2841LJX.png;train;2841LJX;actual;dificil;nombre_archivo;alta;530;586;proporción 1.12 fuera de rango (placa girada o caja errónea)
+todas/2885BKJ.png;train;2885BKJ;actual;dificil;nombre_archivo;alta;961;17;nitidez 17 < 60
+todas/2942HFB.png;train;2942HFB;actual;facil;nombre_archivo;alta;135;11845;
+todas/2953JHW.png;train;2953JHW;actual;dificil;nombre_archivo;alta;897;50;nitidez 50 < 60
+todas/2956MJG.png;train;2956MJG;actual;facil;nombre_archivo;alta;788;447;
+todas/3046KWK.png;train;3046KWK;actual;facil;nombre_archivo;alta;396;170;
+todas/3161LNC.png;train;3161LNC;actual;facil;nombre_archivo;alta;548;135;
+todas/3340JMF.png;train;3340JMF;actual;facil;nombre_archivo;alta;1234;224;
+todas/3451LGB.png;train;3451LGB;actual;facil;nombre_archivo;alta;205;895;
+todas/3582LBT.png;train;3582LBT;actual;dificil;nombre_archivo;alta;391;158;proporción 1.40 fuera de rango (placa girada o caja errónea)
+todas/3587DCX.png;train;3587DCX;actual;facil;nombre_archivo;alta;1076;397;
+todas/3587DCX_foto2.png;train;3587DCX;actual;facil;nombre_archivo;alta;1350;346;
+todas/3660CRT.png;train;3660CRT;actual;facil;nombre_archivo;alta;1179;488;
+todas/3691MTY.png;train;3691MTY;actual;facil;nombre_archivo;alta;711;588;
+todas/3838KWB.png;train;3838KWB;actual;facil;nombre_archivo;alta;179;3820;
+todas/3964LXV.png;train;3964LXV;actual;dificil;nombre_archivo;alta;355;3010;proporción 1.57 fuera de rango (placa girada o caja errónea)
+todas/3964LXV_foto2.png;train;3964LXV;actual;facil;nombre_archivo;alta;1045;746;
+todas/3.png;valid;4810FYN;actual;facil;lectura_manual;alta;274;2102;
+todas/4000GFL.png;train;4000GFL;actual;dificil;nombre_archivo;alta;596;21;nitidez 21 < 60
+todas/4078BVX_0.png;train;4078BVX;actual;dificil;nombre_archivo;alta;221;873;varias cajas en la imagen
+todas/4078BVX_1.png;train;4078BVX;actual;dificil;nombre_archivo;alta;133;1447;varias cajas en la imagen
+todas/4125DVF.png;train;4125DVF;actual;facil;nombre_archivo;alta;127;4273;
+todas/4181GWT.png;train;4181GWT;actual;facil;nombre_archivo;alta;268;199;
+todas/4182KMG.png;train;4182KMG;actual;dificil;nombre_archivo;alta;817;20;nitidez 20 < 60
+todas/4481DKX.png;train;4481DKX;actual;facil;nombre_archivo;alta;554;185;
+todas/4674FHC.png;train;4674FHC;actual;facil;nombre_archivo;alta;939;297;
+todas/4674FHC_foto2.png;train;4674FHC;actual;facil;nombre_archivo;alta;1335;156;
+todas/4757GSY.png;train;4757GSY;actual;facil;nombre_archivo;alta;518;336;
+todas/4841LFS.png;test;4841LFS;actual;facil;nombre_archivo;alta;207;3044;
+todas/4950KZK.png;train;4950KZK;actual;facil;nombre_archivo;alta;369;2209;
+todas/4.png;train;1049LDV;actual;facil;lectura_manual;alta;317;2638;
+todas/5052HLJ.png;train;5052HLJ;actual;facil;nombre_archivo;alta;555;321;
+todas/5172LTZ.png;train;5172LTZ;actual;facil;nombre_archivo;alta;795;862;
+todas/5215HSH.png;train;5215HSH;actual;facil;nombre_archivo;alta;458;300;
+todas/5215HXL.png;train;5215HXL;actual;facil;nombre_archivo;alta;681;305;
+todas/5239LSB.png;valid;5239LSB;actual;facil;nombre_archivo;alta;341;244;
+todas/5240KSW.png;train;5240KSW;actual;facil;nombre_archivo;alta;543;80;
+todas/5275HGY.png;train;5275HGY;actual;facil;nombre_archivo;alta;1081;152;
+todas/5275HGY_foto2.png;train;5275HGY;actual;facil;nombre_archivo;alta;1373;188;
+todas/5422MSY.png;train;5422MSY;actual;dificil;nombre_archivo;alta;157;111;proporción 0.29 fuera de rango (placa girada o caja errónea)
+todas/5493DHZ.png;train;5493DHZ;actual;dificil;nombre_archivo;alta;478;132;proporción 1.01 fuera de rango (placa girada o caja errónea)
+todas/5789JHB.png;train;5789JHB;actual;facil;nombre_archivo;alta;912;338;
+todas/5796DKP.png;train;5796DKP;actual;facil;nombre_archivo;alta;937;617;
+todas/5796DKP_foto2.png;train;5796DKP;actual;facil;nombre_archivo;alta;1271;501;
+todas/5921LMH.png;train;5921LMH;actual;dificil;nombre_archivo;alta;114;3847;proporción 1.58 fuera de rango (placa girada o caja errónea)
+todas/5.png;train;5025JJM;actual;facil;lectura_manual;alta;271;2756;
+todas/6005KFV.png;train;6005KFV;actual;facil;nombre_archivo;alta;602;544;
+todas/6040DLX.png;train;6040DLX;actual;facil;nombre_archivo;alta;554;275;
+todas/6298KSN_0.png;valid;6298KSN;actual;dificil;nombre_archivo;alta;128;5898;varias cajas en la imagen
+todas/6298KSN_1.png;valid;6298KSN;actual;dificil;nombre_archivo;alta;85;7189;"ancho 85px < 100; varias cajas en la imagen"
+todas/6299JJL.png;train;6299JJL;actual;facil;nombre_archivo;alta;339;747;
+todas/6401JBX.png;train;6401JBX;actual;facil;nombre_archivo;alta;1034;149;
+todas/6445HNP.png;train;6445HNP;actual;dificil;nombre_archivo;alta;965;29;nitidez 29 < 60
+todas/6554BNX.png;train;6554BNX;actual;facil;nombre_archivo;alta;1095;426;
+todas/6704KNN.png;train;6704KNN;actual;facil;nombre_archivo;alta;151;1075;
+todas/6775BNF.png;train;6775BNF;actual;facil;nombre_archivo;alta;847;82;
+todas/6929LKK.png;train;6929LKK;actual;facil;nombre_archivo;alta;1004;484;
+todas/7153JWD.png;train;7153JWD;actual;facil;nombre_archivo;alta;1256;155;
+todas/7254LJJ.png;train;7254LJJ;actual;dificil;nombre_archivo;alta;917;53;nitidez 53 < 60
+todas/7270GVF.png;train;7270GVF;actual;facil;nombre_archivo;alta;305;644;
+todas/7318GSB.png;train;7318GSB;actual;facil;nombre_archivo;alta;475;229;
+todas/7332JKC.png;train;7332JKC;actual;facil;nombre_archivo;alta;295;1781;
+todas/7746KBG.png;train;7746KBG;actual;facil;nombre_archivo;alta;425;126;
+todas/7963KNH.png;train;7963KNH;actual;dificil;nombre_archivo;alta;994;33;nitidez 33 < 60
+todas/7.png;train;1104CZK;actual;facil;lectura_manual;revisar;305;192;
+todas/8014LXF.png;train;8014LXF;actual;facil;nombre_archivo;alta;293;376;
+todas/8168GJG.png;test;8168GJG;actual;facil;nombre_archivo;alta;188;5234;
+todas/8597FSC.png;train;8597FSC;actual;facil;nombre_archivo;alta;477;137;
+todas/8691KPN.png;train;8691KPN;actual;facil;nombre_archivo;alta;353;269;
+todas/8712HJG.png;test;8712HJG;actual;facil;nombre_archivo;alta;123;9189;
+todas/8727JTC.png;train;8727JTC;actual;facil;nombre_archivo;alta;1307;211;
+todas/8727JTC_foto2.png;train;8727JTC;actual;facil;nombre_archivo;alta;872;257;
+todas/8778LVY.png;train;8778LVY;actual;facil;nombre_archivo;alta;425;482;
+todas/8903KPT_0.png;valid;8903KPT;actual;dificil;nombre_archivo;alta;77;7722;"ancho 77px < 100; varias cajas en la imagen"
+todas/8903KPT_1.png;valid;8903KPT;actual;dificil;nombre_archivo;alta;42;7008;"ancho 42px < 100; varias cajas en la imagen"
+todas/8953JXP.png;train;8953JXP;actual;facil;nombre_archivo;alta;953;581;
+todas/8.png;train;4577JNF;actual;facil;lectura_manual;alta;188;3736;
+todas/9063MPD.png;train;9063MPD;actual;dificil;nombre_archivo;alta;638;976;proporción 7.78 fuera de rango (placa girada o caja errónea)
+todas/9395MSB.png;train;9395MSB;actual;facil;nombre_archivo;alta;993;461;
+todas/9498LCN.png;train;9498LCN;actual;dificil;nombre_archivo;alta;91;4981;ancho 91px < 100
+todas/9532GVC.png;train;9532GVC;actual;dificil;nombre_archivo;alta;904;51;nitidez 51 < 60
+todas/9542KDC.png;train;9542KDC;actual;facil;nombre_archivo;alta;430;105;
+todas/9603LFP.png;train;9603LFP;actual;facil;nombre_archivo;alta;778;105;
+todas/9603MPD.png;train;9603MPD;actual;facil;nombre_archivo;alta;735;841;
+todas/9786KTP.png;train;9786KTP;actual;facil;nombre_archivo;alta;855;539;
+todas/9883GTM.png;train;9883GTM;actual;facil;nombre_archivo;alta;1460;94;
+todas/CNP2309AW.png;train;CNP2309AW;provincial_o_especial;facil;lectura_manual;alta;179;1298;
+todas/Coches-mas-vendidos-Espana-2018.png;train;0310RCU;actual_con_vocal;facil;lectura_manual;alta;103;8028;
+todas/como-saber-que-ano-es-tu-coche-matricula.png;train;0019GVM;actual;facil;lectura_manual;alta;363;1378;
+todas/GC4370BV_0.png;train;GC4370BV;provincial_o_especial;dificil;lectura_manual;alta;171;2053;varias cajas en la imagen
+todas/GC4370BV_1.png;train;0635LYZ;actual;dificil;lectura_manual;alta;117;1733;varias cajas en la imagen
+todas/GR5101AT.png;test;GR5101AT;provincial_o_especial;dificil;lectura_manual;alta;57;13568;ancho 57px < 100
+todas/Imagen-de-WhatsApp-2022-11-14-a-las-09-52-21.png;train;4041LHK;actual;facil;lectura_manual;alta;395;2304;
+todas/Imagen-de-WhatsApp-2022-11-14-a-las-09-52-23.png;train;GC4905BV;provincial_o_especial;facil;lectura_manual;alta;296;2471;
+todas/imagen8709_NM8710_MG7782316.png;train;2021AXP;actual_con_vocal;facil;lectura_manual;alta;150;3295;
+todas/IMG-20221114-WA0072.png;train;0239GLK;actual;facil;lectura_manual;alta;197;4047;
+todas/IMG-20221114-WA0073.png;train;7470GVH;actual;facil;lectura_manual;revisar;120;7413;
+todas/IMG-20221114-WA0074.png;train;6631KWY;actual;facil;lectura_manual;alta;141;1894;
+todas/IMG-20221114-WA0075.png;train;4511HTH;actual;facil;lectura_manual;alta;108;9320;
+todas/IMG-20221114-WA0076.png;test;4597HXL;actual;facil;lectura_manual;alta;180;2888;
+todas/IMG-20221114-WA0077.png;valid;8433LTC;actual;facil;lectura_manual;alta;180;4502;
+todas/IMG-20221114-WA0078.png;valid;0063HSJ;actual;facil;lectura_manual;alta;220;4334;
+todas/IMG-20221114-WA0079.png;valid;3343DYL;actual;facil;lectura_manual;alta;201;2881;
+todas/IMG-20221114-WA0080.png;train;5930FMT;actual;facil;lectura_manual;alta;192;3214;
+todas/IMG-20221114-WA0081.png;train;2496BTM;actual;facil;lectura_manual;alta;214;3285;
+todas/IMG-20221114-WA0082.png;train;5670JKF;actual;dificil;lectura_manual;revisar;72;6585;ancho 72px < 100
+todas/IMG-20221114-WA0083.png;train;4138KFK;actual;facil;lectura_manual;alta;194;9868;
+todas/IMG-20221114-WA0084.png;train;5791FTD;actual;facil;lectura_manual;alta;330;1438;
+todas/IMG-20221114-WA0085.png;train;0635LYZ;actual;facil;lectura_manual;alta;177;2969;
+todas/IMG-20221114-WA0086.png;valid;9556KTR;actual;facil;lectura_manual;alta;196;3846;
+todas/IMG-20221114-WA0087.png;train;7484HWF;actual;facil;lectura_manual;alta;157;2098;
+todas/IMG-20221114-WA0088.png;valid;6656JPW;actual;facil;lectura_manual;alta;168;2115;
+todas/IMG-20221114-WA0089.png;train;0523HNF;actual;facil;lectura_manual;alta;152;3912;
+todas/IMG-20221114-WA0090.png;train;4103HMX;actual;facil;lectura_manual;alta;227;4428;
+todas/IMG-20221114-WA0091.png;train;GC2670CM;provincial_o_especial;facil;lectura_manual;alta;207;6561;
+todas/IMG-20221114-WA0092.png;train;8686LLJ;actual;facil;lectura_manual;alta;220;2663;
+todas/IMG-20221114-WA0093.png;train;9311BMF;actual;dificil;lectura_manual;revisar;72;3580;ancho 72px < 100
+todas/IMG-20221114-WA0094.png;valid;3587KSG;actual;facil;lectura_manual;alta;180;6424;
+todas/IMG-20221114-WA0095.png;train;0849GSD;actual;facil;lectura_manual;alta;110;9579;
+todas/IMG-20221114-WA0096.png;valid;1805GTP;actual;facil;lectura_manual;alta;335;4015;
+todas/IMG-20221114-WA0097.png;train;9160JBM;actual;facil;lectura_manual;alta;191;3452;
+todas/IMG-20221114-WA0098.png;train;9780HCF;actual;facil;lectura_manual;alta;161;3096;
+todas/IMG-20221114-WA0099.png;train;1268CDN;actual;facil;lectura_manual;alta;252;3833;
+todas/IMG20221114082327_0.png;train;7430HNM;actual;dificil;lectura_manual;alta;327;1290;varias cajas en la imagen
+todas/IMG20221114082327_1.png;train;7110FPJ;actual;dificil;lectura_manual;alta;220;2063;varias cajas en la imagen
+todas/IMG20221114082331.png;valid;7430HNM;actual;facil;lectura_manual;alta;759;169;
+todas/IMG20221114082335.png;train;7110FPJ;actual;facil;lectura_manual;alta;645;211;
+todas/IMG20221114082338_0.png;valid;7927JHX;actual;dificil;lectura_manual;revisar;387;365;varias cajas en la imagen
+todas/IMG20221114082338_1.png;valid;6401DWL;actual;dificil;lectura_manual;revisar;272;384;varias cajas en la imagen
+todas/IMG20221114113754.png;train;8916BDG;actual;facil;lectura_manual;alta;558;1234;
+todas/IMG20221114113800.png;train;4324KRD;actual;facil;lectura_manual;alta;573;1706;
+todas/IMG20221114113807.png;test;2465DYD;actual;facil;lectura_manual;alta;734;1388;
+todas/IMG20221114113823.png;train;3821GYG;actual;facil;lectura_manual;alta;552;911;
+todas/IMG20221114113830.png;train;0674BZH;actual;facil;lectura_manual;alta;757;530;
+todas/IMG20221114113836.png;train;3027LMJ;actual;facil;lectura_manual;alta;573;1006;
+todas/IMG20221114113843.png;train;4928JBF;actual;facil;lectura_manual;alta;789;1234;
+todas/IMG20221114113849.png;valid;9074FYM;actual;facil;lectura_manual;alta;707;818;
+todas/IMG20221114113902.png;train;6352LNB;actual;facil;lectura_manual;alta;960;311;
+todas/IMG20221114113915.png;train;GC8300CB;provincial_o_especial;facil;lectura_manual;alta;673;1008;
+todas/IMG20221114113931.png;train;8590LYT;actual;facil;lectura_manual;alta;553;1134;
+todas/IMG20221114113935.png;train;1336FLG;actual;facil;lectura_manual;alta;1131;419;
+todas/IMG20221114113948.png;valid;4452HYG;actual;facil;lectura_manual;alta;883;329;
+todas/IMG20221114114128.png;train;0083CPC;actual;facil;lectura_manual;alta;858;433;
+todas/IMG20221115153655.png;valid;0182GKT;actual;facil;lectura_manual;alta;546;224;
+todas/prueba-peugeot-308-hybrid-phev-2_mid6359518109bdc.png;train;9729LTL;actual;facil;lectura_manual;alta;109;4890;
+todas/0182GLK.png;valid;0182GLK;actual;facil;nombre_archivo;alta;1001;241;
+todas/0304FWK.png;valid;0304FWK;actual;facil;nombre_archivo;alta;326;380;
+todas/1310MPK.png;valid;1310MPK;actual;facil;nombre_archivo;alta;139;449;
+todas/1339MMS.png;valid;1339MMS;actual;facil;nombre_archivo;alta;722;95;
+todas/5004MGB.png;valid;5004MGB;actual;dificil;nombre_archivo;alta;195;135;proporción 0.94 fuera de rango (placa girada o caja errónea)
+todas/5488LKV.png;valid;5488LKV;actual;facil;nombre_archivo;alta;1463;160;
+todas/6222JWN.png;valid;6222JWN;actual;dificil;nombre_archivo;alta;634;52;nitidez 52 < 60
+todas/6688KSW.png;valid;6688KSW;actual;facil;nombre_archivo;alta;931;636;
+todas/8555JKG.png;valid;8555JKG;actual;facil;nombre_archivo;alta;938;149;
+todas/8970GZR.png;valid;8970GZR;actual;facil;nombre_archivo;alta;522;220;
+todas/9075MDZ.png;valid;9075MDZ;actual;facil;nombre_archivo;alta;584;893;
+todas/9247CZG.png;valid;9247CZG;actual;facil;nombre_archivo;alta;1289;386;
+todas/0550HNN.png;test;0550HNN;actual;facil;nombre_archivo;alta;193;1325;
+todas/1062FNT.png;test;1062FNT;actual;facil;nombre_archivo;alta;1434;565;
+todas/1111LRB.png;test;1111LRB;actual;facil;nombre_archivo;alta;719;179;
+todas/2929KXJ.png;test;2929KXJ;actual;facil;nombre_archivo;alta;1218;235;
+todas/3044JMB.png;test;3044JMB;actual;facil;nombre_archivo;alta;929;635;
+todas/3076CCV.png;test;3076CCV;actual;facil;nombre_archivo;alta;125;2168;
+todas/3497BYY.png;test;3497BYY;actual;facil;nombre_archivo;alta;330;449;
+todas/3929GVS.png;test;3929GVS;actual;facil;nombre_archivo;alta;261;1277;
+todas/4283DJR.png;test;4283DJR;actual;facil;nombre_archivo;alta;1143;482;
+todas/4373KYG.png;test;4373KYG;actual;facil;nombre_archivo;alta;480;236;
+todas/5240BFM.png;test;5240BFM;actual;facil;nombre_archivo;alta;454;309;
+todas/5816FWG.png;test;5816FWG;actual;dificil;nombre_archivo;alta;539;12;nitidez 12 < 60
+todas/6000GVT.png;test;6000GVT;actual;facil;nombre_archivo;alta;1256;269;
+todas/6072HBJ.png;test;6072HBJ;actual;facil;nombre_archivo;alta;368;554;
+todas/6230FXF.png;test;6230FXF;actual;facil;nombre_archivo;alta;143;1636;
+todas/6556KKH.png;test;6556KKH;actual;facil;nombre_archivo;alta;790;204;
+todas/7007KFD.png;test;7007KFD;actual;facil;nombre_archivo;alta;194;1059;
+todas/7067KSH.png;test;7067KSH;actual;facil;nombre_archivo;alta;1318;321;
+todas/7469JYS.png;test;7469JYS;actual;facil;nombre_archivo;alta;596;437;
+todas/8120GLL.png;test;8120GLL;actual;facil;nombre_archivo;alta;827;667;
+todas/9869KST.png;test;9869KST;actual;facil;nombre_archivo;alta;211;823;
+todas/9892JFR.png;test;9892JFR;actual;facil;nombre_archivo;alta;1159;485;
+todas/9961HDK.png;test;9961HDK;actual;facil;nombre_archivo;alta;458;570;

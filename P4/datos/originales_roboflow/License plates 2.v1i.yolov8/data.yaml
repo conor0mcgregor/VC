@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 1
+names: ['License-Plate']
+
+roboflow:
+  workspace: joel-morera-apaza
+  project: license-plates-2-gbuvf-dh945
+  version: 1
+  license: CC BY 4.0
+  url: https://app.roboflow.com/joel-morera-apaza/license-plates-2-gbuvf-dh945/1
