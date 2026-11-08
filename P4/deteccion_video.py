@@ -6,8 +6,15 @@ from collections import defaultdict
 from dataclasses import dataclass
 from typing import Optional
 
+# Windows: NumPy/MKL y PyTorch pueden cargar dos runtimes OpenMP distintos.
+# Permite que el proceso continúe en este entorno de trabajo.
+os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")
+
+from OCR.matricula_ocr import leer_matricula_easyocr
+
 import cv2
 from ultralytics import YOLO
+
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SALIDA_DIR = os.path.join(BASE_DIR, "salida/pruebas")
@@ -18,7 +25,7 @@ CLASS_NAMES = {
     3: "motorcycle", 5: "bus", 7: "truck",
 }
 CLASSES = list(CLASS_NAMES)
-VEHICULOS = {1, 2, 3, 5, 7}
+VEHICULOS = {2, 3, 5, 7}
 CLASE_MATRICULA = 100  # fuera del rango COCO para no colisionar
 NOMBRE_MATRICULA = "matricula"
 
@@ -43,6 +50,8 @@ class Matricula:
     bbox: tuple
     confianza: float
     texto: str = ""
+    formato_valido: bool = False
+    confianza_matricula: float = 0.0
 
 
 @dataclass
@@ -60,7 +69,7 @@ class Deteccion:
 
 def parse_args():
     p = argparse.ArgumentParser(description="Detección y seguimiento en vídeo")
-    p.add_argument("--video", default=os.path.join(BASE_DIR, "videos/video1.mp4"))
+    p.add_argument("--video", default=os.path.join(BASE_DIR, "videos/video7.mp4"))
     p.add_argument("--no-show", action="store_true", help="no mostrar ventana")
     p.add_argument("--max-frames", type=int, default=None)
     return p.parse_args()
@@ -79,9 +88,14 @@ def detectar_matricula(model_matriculas, frame, bbox):
     i = int(boxes.conf.argmax())
     mx1, my1, mx2, my2 = (int(v) for v in boxes.xyxy[i].cpu().tolist())
     # Volver a coordenadas del fotograma completo
+    texto, confianza, es_valida = leer_matricula_easyocr(recorte[my1:my2, mx1:mx2])
+    if es_valida: anotar_matricula(texto, confianza)
     return Matricula(
         bbox=(mx1 + max(x1, 0), my1 + max(y1, 0), mx2 + max(x1, 0), my2 + max(y1, 0)),
         confianza=float(boxes.conf[i]),
+        texto=texto,
+        formato_valido=es_valida,
+        confianza_matricula=confianza,
     )
 
 
@@ -131,7 +145,7 @@ def dibujar_detecciones(frame, detecciones):
             mx1, my1, mx2, my2 = det.matricula.bbox
             color_m = CLASS_COLORS[CLASE_MATRICULA]
             cv2.rectangle(frame, (mx1, my1), (mx2, my2), color_m, 2)
-            poner_texto(frame, f"{NOMBRE_MATRICULA} {det.matricula.confianza:.2f}",
+            poner_texto(frame, f"{det.matricula.texto} {det.matricula.confianza:.2f}",
                         mx1, my2 + 25, color_m)
 
 
@@ -164,6 +178,10 @@ def escribir_fila_csv(csv_writer, frame_idx, det):
         })
     csv_writer.writerow(fila)
 
+def anotar_matricula(texto, confianza):
+    ruta_anotaciones = os.path.join(SALIDA_DIR, "video4_matriculas_detectadas.txt")
+    with open(ruta_anotaciones, "a", encoding="utf-8") as f:
+        f.write(f"{texto} (confianza: {confianza:.2f})\n")
 
 def escribir_resumen(ruta_resumen, ids_por_clase, detecciones_por_clase):
     print("\nResumen (IDs únicos por clase):")
@@ -180,7 +198,7 @@ def escribir_resumen(ruta_resumen, ids_por_clase, detecciones_por_clase):
 
 def main():
     args = parse_args()
-    mostrar = False
+    mostrar = True
 
     os.makedirs(SALIDA_DIR, exist_ok=True)
     nombre = os.path.splitext(os.path.basename(args.video))[0]

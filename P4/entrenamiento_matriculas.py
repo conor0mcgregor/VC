@@ -35,7 +35,8 @@ def detectar_matricula(imagen):
 
             bbox = (int(x1), int(y1), int(x2), int(y2))
             confianza = float(conf)
-            texto = "MATRICULA_DETECTADA"
+            recorte = imagen[bbox[1]:bbox[3], bbox[0]:bbox[2]]
+            texto = comprobar_evaluacion(recorte, "0000XXX")
 
             matriculas.append(Matricula(bbox, texto, confianza))
 
@@ -52,7 +53,7 @@ def dibujar_matriculas(imagen, matriculas):
 
 
 if __name__ == "__main__":
-    ruta_imagen = os.path.join(BASE_DIR, "images/matriculas/matriculas7.jpeg")
+    ruta_imagen = os.path.join(BASE_DIR, "images/matriculas/calle4.png")
 
     print(f"Procesando imagen: {ruta_imagen}")
 

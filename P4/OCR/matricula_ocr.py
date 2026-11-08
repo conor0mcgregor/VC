@@ -8,7 +8,7 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
-ALLOW = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+ALLOW = "AEIOUBCDFGHJKLMNPRSTVWXYZ0123456789"
 _reader = None
 
 
@@ -20,41 +20,145 @@ def _get_reader():
         _reader = easyocr.Reader(["en"], gpu=False, verbose=False)
     return _reader
 
-
 def _preprocesar(img: np.ndarray) -> np.ndarray:
-    """Convierte el recorte a binario; no intenta abrir ventanas de OpenCV."""
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-    _, thresh = cv2.threshold(
+    # Ampliar la imagen para facilitar el OCR
+    gray = cv2.resize(
         gray,
-        20,    # umbral
-        255,  # valor para los píxeles > umbral
-        cv2.THRESH_BINARY
+        None,
+        fx=3,
+        fy=3,
+        interpolation=cv2.INTER_CUBIC
     )
-    # OpenCV instalado sin GUI no permite cv2.imshow; Matplotlib muestra la imagen.
-    
 
-    plt.imshow(thresh, cmap="gray")
-    plt.title("Recorte preprocesado")
-    plt.axis("off")
-    plt.show()
+    # Reducir ruido preservando bordes
+    gray = cv2.bilateralFilter(
+        gray,
+        d=11,
+        sigmaColor=17,
+        sigmaSpace=17
+    )
+
+    # Mejorar contraste local
+    clahe = cv2.createCLAHE(
+        clipLimit=2.0,
+        tileGridSize=(8, 8)
+    )
+    gray = clahe.apply(gray)
+
+    # Binarización automática
+    thresh = cv2.threshold(
+        gray,
+        0,
+        255,
+        cv2.THRESH_BINARY + cv2.THRESH_OTSU
+    )[1]
+
+    # Limpiar pequeños ruidos
+    kernel = np.ones((2, 2), np.uint8)
+    thresh = cv2.morphologyEx(
+        thresh,
+        cv2.MORPH_OPEN,
+        kernel
+    )
+
+    # Texto negro sobre fondo blanco
+    if np.mean(thresh) < 127:
+        thresh = 255 - thresh
 
     return thresh
 
-
 def _es_formato_matricula(texto: str) -> bool:
-    return bool(
-        re.fullmatch(r"\d{4}[A-Z]{3}", texto)
-        or re.fullmatch(r"[A-Z]{1,3}\d{3,4}[A-Z]{1,2}", texto)
-    )
-
+    return len(texto) > 4
 
 def leer_matricula(img: np.ndarray) -> tuple[str, float, bool]:
     if img is None or img.size == 0:
         return "", 0.0, False
 
     resultado = _get_reader().readtext(
-        _preprocesar(img), allowlist=ALLOW, detail=1,
+        img,
+        allowlist=ALLOW,
+        paragraph=False,
+        decoder="greedy",
+        mag_ratio=1.5,
+        width_ths=0.7,
+        height_ths=0.7,
+    )
+
+    # Cada caja: (centro_x, centro_y, alto, texto, confianza)
+    cajas = []
+    for puntos, texto, conf in resultado:
+        if conf < 0.15:
+            continue
+        p = np.asarray(puntos)
+        cajas.append((
+            p[:, 0].mean(),
+            p[:, 1].mean(),
+            p[:, 1].max() - p[:, 1].min(),
+            texto,
+            conf,
+        ))
+
+    if not cajas:
+        return "", 0.0, False
+
+    # Descarta cajas mucho más pequeñas que la mayor (ruido, tornillos, textos auxiliares)
+    alto_max = max(c[2] for c in cajas)
+    cajas = [c for c in cajas if c[2] >= 0.55 * alto_max]
+
+    # Orden de lectura: de izquierda a derecha
+    cajas.sort(key=lambda c: (c[0], c[1]))
+
+    texto = re.sub(r"[^A-Z0-9]", "", "".join(c[3] for c in cajas).upper())
+    confianza = float(np.mean([c[4] for c in cajas]))
+
+    return texto, confianza, _es_formato_matricula(texto)
+
+def extraer_texto(img: np.ndarray) -> str:
+    """Devuelve solo el texto reconocido y normalizado."""
+    texto, _, _ = leer_matricula(img)
+    return texto
+
+
+def leer_matricula_easyocr(img: np.ndarray) -> tuple[str, float, bool]:
+    """Alias conservado para código que usaba el nombre anterior."""
+    return leer_matricula(img)
+
+#PARA EVALUAR--------------------------------------------------
+def mostrar_comparativa(img, thresh):
+    img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+    fig, ax = plt.subplots(1, 2, figsize=(10, 5))
+
+    ax[0].imshow(thresh, cmap="gray")
+    ax[0].set_title("Thresh")
+    ax[0].axis("off")
+
+    ax[1].imshow(img_rgb)
+    ax[1].set_title("Original")
+    ax[1].axis("off")
+
+    plt.tight_layout()
+    plt.show()
+
+
+def comprobar_evaluacion(img: np.ndarray, etiqueta: str):
+    """Devuelve True si la predicción coincide con la matrícula real."""
+    texto, imagen = leer_matricula_para_prueba(img)
+    print(f"| real: {etiqueta} | predicha: {texto} | {texto == etiqueta}")
+    mostrar_comparativa(img, imagen)
+    return texto
+
+
+
+def leer_matricula_para_prueba(img: np.ndarray):
+    if img is None or img.size == 0:
+        return "", 0.0, False
+
+    img_procesada = _preprocesar(img)
+    resultado = _get_reader().readtext(
+        img_procesada, allowlist=ALLOW, detail=1,
         paragraph=False, decoder="greedy", mag_ratio=1.0,
     )
     if not resultado:
@@ -77,15 +181,10 @@ def leer_matricula(img: np.ndarray) -> tuple[str, float, bool]:
     cajas.sort(key=(lambda c: (c[2], c[1])) if h > w * 1.12 else (lambda c: (c[1], c[2])))
     texto = re.sub(r"[^A-Z0-9]", "", "".join(caja[3] for caja in cajas).upper())
     confianza = sum(caja[4] for caja in cajas) / len(cajas)
-    return texto, confianza, _es_formato_matricula(texto)
+    return texto, img_procesada
 
 
-def extraer_texto(img: np.ndarray) -> str:
-    """Devuelve solo el texto reconocido y normalizado."""
-    texto, _, _ = leer_matricula(img)
-    return texto
-
-
-def leer_matricula_easyocr(img: np.ndarray) -> tuple[str, float, bool]:
-    """Alias conservado para código que usaba el nombre anterior."""
-    return leer_matricula(img)
+def evaluar(img, etiqueta):
+    """Devuelve True si la predicción coincide con la matrícula real."""
+    texto, confiaza, _= leer_matricula(img)
+    return texto, texto == etiqueta, confiaza
