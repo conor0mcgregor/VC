@@ -35,11 +35,16 @@ texto, confianza, formato_valido = leer_matricula(recorte)
 Desde la raíz del proyecto:
 
 ```powershell
-py P4/OCR/evaluar_dataset.py
+python P4/OCR/evaluar_ocr.py
 ```
 
-El script lee todas las filas de `P4/datos/matriculas_recortadas/ocr_dataset.csv`
-y muestra en consola la etiqueta real y la predicción. No guarda resultados.
+El script evalúa las imágenes de `P4/datos/matriculas_recortadas/ocr_dataset.csv`.
+Sobrescribe `P4/OCR/resultados/predicciones.csv` y `analisis.csv` en cada ejecución.
+Para generar también la comparación con SmolVLM, ejecuta desde la raíz:
+
+```powershell
+python "P4/comparativa ocr vs SmolVLM/comparar_ocr_smolvlm.py"
+```
 
 El extractor amplía recortes pequeños, aplica gris y CLAHE, ejecuta EasyOCR una
 vez y une las detecciones principales. El lector se carga una vez y se reutiliza.
