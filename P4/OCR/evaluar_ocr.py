@@ -11,7 +11,7 @@ os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")
 import cv2
 
 from comparativa.evaluacion_comun import DATA_DIR, calcular_analisis, cargar_dataset, crear_prediccion, guardar_csv
-from matricula_ocr import leer_matricula
+from OCR.matricula_ocr import leer_matricula
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent

@@ -7,11 +7,13 @@ import subprocess
 import sys
 from pathlib import Path
 
-from P4.OCR.evaluar_ocr import evaluar_ocr
-from P4.SmolVLM.evaluar_SmolVLM import evaluar_smolvlm
+P4_DIR = Path(__file__).resolve().parent.parent
 
+sys.path.insert(0, str(P4_DIR))
 
-P4_DIR = Path(__file__).resolve().parents[1]
+from OCR.evaluar_ocr import evaluar_ocr
+from SmolVLM.evaluar_SmolVLM import evaluar_smolvlm
+
 OCR_RESULTADOS = P4_DIR / "OCR" / "resultados"
 SMOL_RESULTADOS = P4_DIR / "SmolVLM" / "resultados"
 RESULTADOS_DIR = Path(__file__).resolve().parent / "resultados"
@@ -30,11 +32,11 @@ def guardar_csv(ruta, filas):
 
 
 def ejecutar_evaluadores():
-    print("Ejecutando evaluador de SmolVLM...")
+    print("Ejecutando evaluador de EasyOCR...")
     evaluar_ocr()
     print("=========================================================")
     print("=========================================================")
-    print("Ejecutando evaluador de EasyOCR...")
+    print("Ejecutando evaluador de SmolVLM...")
     evaluar_smolvlm()
 
 

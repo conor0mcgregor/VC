@@ -1,0 +1,2 @@
+﻿modelo,dispositivo,imagenes_procesadas,aciertos_exactos,accuracy_exacta_pct,lecturas_vacias,lecturas_vacias_pct,errores_caracteres,caracteres_reales,cer_global,accuracy_caracteres,tiempo_total_segundos,tiempo_medio_segundos
+SmolVLM,cpu,217,191,88.0184331797235,0,0.0,121,1526,0.07929226736566186,0.9207077326343381,3077.5970962,14.182475097695853

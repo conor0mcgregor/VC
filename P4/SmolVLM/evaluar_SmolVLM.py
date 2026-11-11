@@ -7,6 +7,8 @@ import sys
 import time
 from pathlib import Path
 
+from SmolVLM.matricula_SmolVLM import DISPOSITIVO, leer_matricula
+
 os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")
 
 import cv2
@@ -23,7 +25,6 @@ from comparativa.evaluacion_comun import (  # noqa: E402
     sincronizar_gpu,
 )
 
-from matricula_SmolVLM import DISPOSITIVO, leer_matricula  # noqa: E402
 
 
 RESULTADOS_DIR = SCRIPT_DIR / "resultados"
