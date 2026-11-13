@@ -43,6 +43,7 @@ def ejecutar_evaluadores():
 def validar_mismas_imagenes(predicciones_ocr, predicciones_smol):
     ocr = {fila["imagen"]: fila for fila in predicciones_ocr}
     smol = {fila["imagen"]: fila for fila in predicciones_smol}
+
     if len(ocr) != len(predicciones_ocr) or len(smol) != len(predicciones_smol):
         raise ValueError("Hay nombres de imagen duplicados en uno de los CSV.")
     if ocr.keys() != smol.keys():
@@ -52,6 +53,7 @@ def validar_mismas_imagenes(predicciones_ocr, predicciones_smol):
     for imagen in ocr:
         if ocr[imagen]["matricula_real"] != smol[imagen]["matricula_real"]:
             raise ValueError(f"La etiqueta real no coincide para {imagen}.")
+
     return ocr, smol
 
 

@@ -1,337 +1,691 @@
-## Práctica 4. Detección de vehículos y matrículas
+# Práctica 4 — Detección de vehículos y matrículas
 
-### Contenidos
+Esta práctica desarrolla un prototipo de visión por computador que procesa vídeo para **detectar y seguir vehículos y personas**, **localizar y leer matrículas**, **volcar los resultados a CSV**, **generar un vídeo anotado** y **proteger la privacidad** de las personas y matrículas en el vídeo guardado.
 
-[Tarea](#41-aspectos-cubiertos)  
-[YOLO](#42-yolo)  
-[Detectando](#43-detectando-desde-muestro-codigo)  
-[Entrenando YOLO](#44-entrenando-yolo)  
-[RT-DETR](#45-rt-detr)
-[Entrega](#46-entrega)
+El trabajo cubre las dos tareas de la práctica:
 
-<!-- MOdelos VLM para OCR https://florence-2.com  -->
+- **P4a — Detección y seguimiento:** detector general, detector de matrículas entrenado y *tracking* de objetos.
+- **P4b — OCR:** reconocimiento de caracteres en las matrículas y comparativa entre un OCR clásico y un modelo de lenguaje visual (VLM).
 
-## 4.0 Sobre la práctica 4
+---
 
-Esta práctica se compone de dos tareas diferentes, detección y OCR. En este README se explica la primera tarea, la detección, para leer sobre la segunda ir a la carpeta *P4b*. Ambas tareas se entregan juntas, en el mismo GitHub, ya que serán evaluadas conjuntamente.
+## Índice
 
-## 4.1 Aspectos cubiertos
+1. [Introducción](#1-introducción)
+2. [Arquitectura y flujo de funcionamiento](#2-arquitectura-y-flujo-de-funcionamiento)
+3. [Entrenamiento del modelo YOLO](#3-entrenamiento-del-modelo-yolo)
+4. [Resultados del entrenamiento](#4-resultados-del-entrenamiento)
+5. [Comparativa de modelos OCR](#5-comparativa-de-modelos-ocr)
+6. [Modelos utilizados en el sistema final](#6-modelos-utilizados-en-el-sistema-final)
+7. [Privacidad](#7-privacidad)
+8. [Conclusiones](#8-conclusiones)
+9. [Ejecución](#9-ejecución)
 
-En esta práctica se aborda el uso de modelos existentes para la detección de objetos y reconocimiento de texto. El principal objetivo que se propone es **desarrollar un prototipo que procese vídeo para la detección y seguimiento de vehículos y personas**. Si bien cuentan con libertad a la hora de escoger los módulos que integren en el prototipo, les sugerimos los siguientes:
+---
 
-- un detector de objetos general, que permita localizar vehículos y personas.
-- un localizador de matrículas.
+## 1. Introducción
 
-Como modelo de partida para la detección de objetos sugerimos hacer uso de la familia de modelos basados en YOLO proporcionada por [Ultralytics](https://github.com/ultralytics/ultralytics). Esta familia de modelos, basados en redes neuronales, requirirá de un entrenamiento, y por lo tanto de un conjunto de datos, para detectar el objeto de interés, en este caso las matrículas.
+### 1.1 Objetivo
 
+El objetivo es construir un *pipeline* completo capaz de recibir un vídeo y, fotograma a fotograma:
 
-<!--De cara a localizar las matrículas, son dos las posibilidades a evaluar:
+1. Detectar personas, bicicletas, coches, motocicletas, autobuses y camiones.
+2. Asignar un identificador de seguimiento a cada objeto.
+3. Detectar la matrícula de cada vehículo y reconocer su texto.
+4. Guardar un CSV con todas las detecciones, coordenadas, matrículas y textos.
+5. Generar un vídeo con las cajas, etiquetas, identificadores y matrículas leídas.
+6. Pixelar las matrículas y las personas en el vídeo resultante para preservar su privacidad.
 
-- Tras detectar un coche, las zonas probables de la matrícula estarán en su parte inferior, y además se asume que se corresponde a una zona rectangular (su contorno lo es)
-- Una segunda alternativa, plantea realizar un entrenamiento de YOLO para detectar el objeto de interés: matrículas
+### 1.2 Problema que se resuelve
 
-Evaluar ambas opciones se considerará un extra en la evaluación de la tarea. Otros aspectos a valorar, se recogen al final de este documento.
+La lectura automática de matrículas en vídeo es difícil por varios motivos:
 
+- Las matrículas ocupan **muy pocos píxeles** dentro del fotograma.
+- Aparecen con **ángulos, desenfoque de movimiento, sombras y reflejos**.
+- Los vehículos se **solapan** y desaparecen parcialmente.
+- El OCR debe distinguir caracteres muy parecidos (`0/O`, `8/B`, `M/N`, `V/W`).
+- Procesar muchos fotogramas con un modelo grande puede ser **demasiado lento**.
 
-[YOLO-NAS](https://github.com/Deci-AI/super-gradients/blob/master/documentation/source/YoloNASQuickstart.md) para mejorar con objetos pequeños y pocos recursos ...
--->
+A esto se añade un requisito de privacidad: el vídeo final no debe permitir leer las matrículas ni reconocer los rasgos de las personas.
 
+### 1.3 Descripción general del sistema
 
-## 4.2 YOLO
+El sistema combina dos detectores YOLO y un OCR:
 
-<!-- environment VC_P1 e portátil -->
+| Etapa | Tecnología |
+|---|---|
+| Detección general y *tracking* | YOLO11n preentrenado en COCO + BoT-SORT |
+| Detección de matrículas | YOLO11n entrenado con el dataset propio (`best.pt`) |
+| Reconocimiento de caracteres | EasyOCR |
+| Comparativa experimental | SmolVLM-500M-Instruct |
+| Procesado de imagen y vídeo | OpenCV |
+| Privacidad | Pixelado propio con OpenCV/NumPy |
 
-Tras la presentación en 2023 de yolov8, Ultralytics puso a disposición yolo11 en septiembre de 2024, yolov12 en marzo de 2025 y yolo26 en 2026 (actualmente comentan el próximo anuncio de yolo27...) A lo largo del texto, al mencionar YOLO, hacemos referencia a un modelo genérico de ultralytics, pudiendo ser cualquier modelo. Para su instalación en un nuevo  *environment*, *VC_P4*, seguir los pasos del [tutorial de instalación de Ultralytics](https://docs.ultralytics.com/quickstart/#install-ultralytics). Por incompatibilidades con uno de los OCR vistos posteriormente, hemos hecho uso de la versión de python 3.9.5 y creado un nuevo *environment*.
+El flujo final está implementado en `deteccion_video.py`, el pixelado en `pixelear.py` y la comparativa OCR en `comparativa/`.
 
-```
-conda create --name VC_P4 python=3.9.5
-conda activate VC_P4
-pip install ultralytics
-pip install lap
-```
+---
 
-Si no funcina con *lap*, probar
+## 2. Arquitectura y flujo de funcionamiento
 
-```
-pip install lapx
-```
+### 2.1 Flujo de datos
 
-Si **cuentas con GPU**, para hacer uso de su potencia de cálculo en el *environment*, necesitas contar con CUDA instalado, y seguir las instrucciones para contar con todos los paquetes compatibles necesarios. Para la instalación, cuentas con esta [guía](https://pytorch.org/get-started/locally/) que te prepara la línea de comando a lanzar. Un ejemplo de la utilizada en mi equipo con CUDAv11.6:
-
-```
-conda install pytorch==1.12.1 torchvision==0.13.1 torchaudio==0.12.1 cudatoolkit=11.6 -c pytorch -c conda-forge
-```
-
-
-<!-- lap para usar el tracker desde código-->
-
-Una vez instalada, puede ejecutarse desde línea de comandos con algo como par auno de los modelos de yolo11:
-
-
-<!-- yolo detect predict model=yolo11n.pt source="C:/Users/otsed/Desktop/RUNNERS_ILUSOS/Multimedia/Bibs/TGC23_PdH_C0056_resultado.mp4"  -->
-```
-yolo detect predict model=yolo11n.pt source="rutaimg_video"
-```
-
-![Segmentación](images/yolo11-detect.jpg)  
-*Resultado del modelo yolo11n.pt con la imagen test.jpg*
-
-
-Con *model* se define el modelo preentrenado a utilizar, los resultados los almacena en la carpeta *runs/detect/predict*. Los distintos parámetros
-de la ejecución se describen en la documentación del modo [*predict*](https://docs.ultralytics.com/modes/predict/). El modelo escogido detecta contenedores, para la segmentación semántica (proporciona la máscara del objeto)
-aplicar por ejemplo el modelo *yolov11n-seg.pt*, con un resultado similar al de la imagen.
-
-```
-yolo detect predict model=yolo11n-seg.pt source="rutaimg_video"
-```
-<!-- yolo detect predict model=yolo11n-seg.pt source="C:/Users/otsed/Desktop/RUNNERS_ILUSOS/Multimedia/Bibs/TGC23_PdH_C0056_resultado.mp4"  -->
-
-![Segmentación](images/yolo11-seg.jpg)  
-*Resultado del modelo yolo11n-seg.pt con la imagen test.jpg*
-
-Otro interesante modelo disponible es el detector de pose, que obtiene un resultado como el de la siguiente imagen.
-
-
-```
-yolo pose predict model=yolo11n-pose.pt source="rutaimg_video"
-```
-
-![Segmentación](images/yolo11-pose.jpg)  
-*Resultado del modelo yolo11n-pose.pt con la imagen test.jpg*
-
-<!-- yolo pose predict model=yolo11n-pose.pt source="C:/Users/otsed/Desktop/RUNNERS_ILUSOS/Multimedia/Bibs/TGC23_PdH_C0056_resultado.mp4"  -->
-
-<!--A este segundo también le añadí la opción "device" para decirle qué tarjetas tiene que usar.-->
-
-La versión de yolo de Ultralytics integra la posibilidad de realizar [seguimiento (tracking)](https://docs.ultralytics.com/modes/track/#features-at-a-glance),
-de momento con los modelos **BoT-SORT** (por defecto) y **ByteTrack**.
-
-
-<!-- C:\Users\otsed\Desktop\RUNNERS_ILUSOS\Multimedia\Bibs\TGC23_PdH_C0056.mp4 -->
-```
-yolo track model=yolo11n-pose.pt source="ruta_video"
+```text
+Vídeo de entrada
+      │
+      ▼
+┌─────────────────────────────────────────────┐
+│ YOLO11n COCO + BoT-SORT                     │
+│ personas, bicicletas, coches, motos,        │
+│ autobuses y camiones + ID de tracking       │
+└─────────────────────────────────────────────┘
+      │
+      ├── persona ──────────────────────────────┐
+      │                                         │
+      └── vehículo                              │
+             │                                  │
+             ▼                                  │
+      recorte del vehículo                      │
+             │                                  │
+             ▼                                  │
+      YOLO de matrículas (best.pt)              │
+             │                                  │
+             ▼                                  │
+      recorte de la matrícula                   │
+             │                                  │
+             ▼                                  │
+      EasyOCR → texto + confianza               │
+             │                                  │
+             ▼                                  │
+      CSV de detecciones                        │
+                                                │
+      cajas de personas + cajas de matrículas ──┤
+                                                ▼
+                                      pixelado de privacidad
+                                                │
+                                                ▼
+                                      dibujo de cajas y textos
+                                                │
+                                                ▼
+                                      fotograma → vídeo de salida
 ```
 
-En todos los casos, el resultado se almacena en la carpeta *runs*.
+### 2.2 Detección de objetos
 
-![Segmentación](images/yolov8-tracker.png)  
-*Resultado del BoT-SORT*
+Se utiliza `yolo11n.pt`, la variante *nano* de YOLO11 preentrenada en COCO. El detector se ejecuta con la lista de clases del proyecto:
 
-
-### 4.3 Detectando desde código
-
-Aunque en la sección [YOLO](#42-yolo) se presentan varios ejemplos de uso desde línea de comando, lo más habitual será manejar los modelos desde nuestro propio código. Para ello, en las primeras celdas del cuaderno ejemplo, *VC_P4.ipynb*, se incluyen ejemplos
-de procesamiento y dibujado de las cajas contenedoras haciendo uso del modelo *yolo11n.pt* desde código python procesando la entrada de la webcam, tanto para detección, como para detección y seguimiento.
-En el primer caso, se consideran todas las clases sin realizar ningún tipo de filtrado, mientras que para realizar el seguimiento se restringen las clases de interés.
-(También se incluye una celda preparada para procesar un vídeo en disco pudiendo escoger el modelo).
-
-
-
-Si quieres acceder a vídeos utilizados para evaluar las técnicas de seguimiento, prueba este [enlace](https://motchallenge.net/data/MOT15/).
-
-
-### 4.4 Entrenando YOLO
-
-Tras hacer uso de YOLO como detector, esta sección aborda el entrenamiento personalizado para detectar objetos de nuestro interés, a partir de cajas contenedoras. De cara a la tarea propuesta, los modelos de YOLO no incluyen la detección de matrículas, por lo que se hace necesario realizar entrenar un modelo propio. El vídeo de test proporcionado incluirá principalmente matrículas españolas, siendo una primera subtarea recopilar o capturar imágenes o vídeos que contengan vehículos con su matrícula visible. Si necesitan cámaras, trípode, etc. hablen con nosotros.
-
-#### Anotación de imágenes
-
-Para realizar un entrenamiento, aparte claro está del modelo a entrenar, necesitaremos un conjunto de datos anotado, en este caso, para la detección de matrículas en coches. Para conformalo, necesitaremos, obtener imágenes con muestras del objeto de interés y realizar las anotaciones en dichas imágenes.
-
-La recopilación de imágenes puede realizarse de distintas maneras
-
-- accediendo a algún conjunto de datos ya existente
-- creando el conjunto de datos
-
-En el segundo caso será necesario recopilar imágenes, pudiendo ser de forma manual, o utilizando utilidades que permitan descargar imágenes realizando búsquedas. Un ejemplo de utilidad, es la proporcionada por [google_images_download](https://pypi.org/project/google_images_download/) que facilita la descarga de un número de imágenes obtenidas realizando búsquedas a través de google.
-
-Tras esta recopilación será necesario en primer término limpiar y filtrar las imágenes, para posteriormente anotar las muestras de nuestro objeto de interés. Asumo una anotación en base a contenedores rectangulares, si bien las herramientas de anotación permiten más variantes.
-
-Si bien existen numerosas herramientas de anotación, las más frecuentes en el grupo han sido:
-
-- [VoTT (Visual Object Tagging Tool)](https://github.com/microsoft/VoTT)
-- [labelme](https://github.com/wkentaro/labelme)
-
-
-La primera de ellas ya no está mantenida. La segunda puede instalarse a través de anaconda, permitiendo distintos tipos de anotación. Para nuestro propósito optaremos por un esquema rectangular. Tras almacenar las anotaciones puede ser necesaria alguna adaptación dependiendo de la red que se use para entrenar. También está la posiblidad de realizar una pequeña aplicación de anotación propia usando python, lo que nos permitirá implementar exactamente las características que necesitemos. A continuación, se presentan las instrucciones para usar labelme.
-
-```
-conda create --name=labelme python=3.9
-conda activate labelme
-pip install labelme
+```python
+CLASS_NAMES = {
+    0: "person", 1: "bicycle", 2: "car",
+    3: "motorcycle", 5: "bus", 7: "truck",
+}
 ```
 
-Una vez instalado *labelme*, el proceso desde *Anaconda Prompt*:
+Solo se conservan las detecciones con confianza igual o superior a `0.4`. La clase `0` es `person`, comprobada directamente en el diccionario de clases del proyecto.
 
-- Teclear *labelme*
-- Una vez abierta la interfaz, seleccionar la carpeta con imágenes a anotar
-- En nuestro caso, que anotaremos zonas rectangulares, escoger *Edit->Create Rectangle*
+### 2.3 Seguimiento
 
-La anotación genera un *json* para cada imagen. Sugerir en cualquier caso echar un vistazo a la [documentación sobre el uso](https://github.com/wkentaro/labelme#usage).
+El seguimiento lo realiza **BoT-SORT**, integrado en Ultralytics y activado con:
 
-No es obligatorio utilizar esta herramienta en concreto, hay numerosas y podrás encontrar comparativas.
-Existen también numerosos servicios en la nube, como por ejemplo [Roboflow](https://app.roboflow.com/login) que requieren crearse una cuenta para acceder a las utilidades, [CVAT](https://www.cvat.ai) o [TigTag](https://www.tictag.io) que permite anotar desde el móvil. Te invito a explorar y escoger la herramienta que más te atraiga para el proceso de anotación.
-
-Lo importante es que sea cómoda y fácil de usar, y se agradece que permita exportar a varios formatos, incluyendo YOLO, que es el que será necesario para realizar el entrenamiento con YOLO.
-
-<!---Momentos en trabajo de Nayar sobre Binary images https://cave.cs.columbia.edu/Statics/monographs/Binary%20Images%20FPCV-1-3.pdf -->
-
-<!-- Guías CVAT
-https://www.simonwenkel.com/lists/software/list-of-annotation-tools-for-machine-learning-research.html
-https://www.v7labs.com/blog/cvat-guide
--->
-
-#### Entrenamiento
-
-Tras utilizar uno o varios modelos preentrenados de YOLO para detección, el propósito de este apartado es aportar las pautas para entrenar un detector basado en YOLO del objeto u objetos que nos sea de interés.
-
-Una vez recopiladas las imágenes y realizadas las anotaciones, antes de proceder a entrenar con YOLO, es necesario disponer las imágenes de determinada forma, y posteriormente especificar las rutas en la llamada. La siguiente imagen
-muestra la estructura de directorios creadas para un conjunto de datos denominado *TGCRBNW*.
-
-![Directorios](images/dirs.png)
-
-Contiene tres subcarpetas:
-
-- *test*
-- *train*
-- *val*
-
-Cada una de ellas a su vez contiene dos subcarpetas:
-
-- *images*
-- *labels*
-
-La primera de ellas contiene las imágenes que se han anotado, mientras que la segunda carpeta contiene para cada imagen anotada su archivo *.txt* homónimo con las correspondientes anotaciones de la imagen. Recordar que el formato esperado por YOLO debe ser algo como:
-
-```
-<object-class-id> <x> <y> <width> <height>
+```python
+model_clases.track(frame, persist=True, tracker="botsort.yaml", ...)
 ```
 
-Los datos de cada línea se refieren a:
+`persist=True` mantiene el estado del tracker entre fotogramas. Cada detección recibe un `identificador_tracking` que se conserva mientras el objeto sea seguido. Este identificador es el que permite contar **IDs únicos** por clase en el resumen final.
 
-- *object-class-id*: identificador numérico de la clase del objeto anotado
-- *x*: coordenada *x* del centro de la ventana
-- *y*: coordenada *y* del centro de la ventana
-- *width*: ancho del contenedor
-- *height*: alto del contenedor
+El seguimiento se aplica a los objetos (personas y vehículos), **no a cada matrícula de forma independiente**: la matrícula se vuelve a detectar en cada fotograma a partir del recorte del vehículo.
 
-Las coordenadas del centro y dimensiones del contenedor estarán normalizadas, es decir, divididas por las dimensiones de la imagen.
+### 2.4 Detección y recorte de matrículas
 
-Para distribuir las imágenes en las tres subcarpetas, debemos llevar a cabo un reparto. Lo habitual es realizar una división aleatoria, donde por ejemplo podemos hacer uso de un 80% para entrenamiento y validación, y un 20% para test. Dentro del primer grupo, puedes optar de nuevo a una división 80/20 o 90/10.
+Para cada vehículo detectado se recorta su región del fotograma y se ejecuta el modelo `best.pt`, entrenado específicamente con matrículas. De todas las cajas devueltas se elige la de **mayor confianza** y se transforman sus coordenadas locales a coordenadas del fotograma completo.
 
-Una vez conformada la estructura de directorios y distribuidas las imágenes, es necesario crear, en mi caso dentro de la carpeta *data*, un archivo *.yaml* que permite especificar las rutas de las imágenes que se proporcionan para entrenamiento, validación y test, además del número de clases a considerar, y sus nombres. En mi caso con una única clase:
+Después se recorta la matrícula y se envía al OCR. El texto y la confianza se asocian al objeto `Matricula`, que queda dentro de la detección del vehículo. Esto permite escribir en el CSV tanto la caja del vehículo como la caja de su matrícula.
 
-```
-# TGCRBNW paths
+### 2.5 Reconocimiento OCR
 
-# train and val data as 1) directory: path/images/, 2) file: path/images.txt, or 3) list: [path1/images/, path2/images/]
-train: C:/Users/otsed/Desktop/RUNNERS/Datasets/TGC_RBNW/train/
-val: C:/Users/otsed/Desktop/RUNNERS/Datasets/TGC_RBNW/val/  
-test: C:/Users/otsed/Desktop/RUNNERS/Datasets/TGC_RBNW/test/  
+El OCR final es **EasyOCR**, cargado una sola vez y reutilizado durante todo el vídeo. El lector se configura con idioma inglés y sin GPU:
 
-# number of classes
-nc: 1
-
-# class names
-names: [ 'bib' ]
+```python
+easyocr.Reader(["en"], gpu=False, verbose=False)
 ```
 
-A partir de este punto es posible lanzar el entrenamiento. Un par de variantes especificando o no el número de épocas, indicando el tamaño de las imágenes a considerar (por defecto 640), y los pesos tomados como punto de partida:
+El reconocimiento aplica una lista de caracteres permitidos (letras y dígitos, sin caracteres especiales), agrupa las cajas de texto, descarta las mucho más pequeñas que la caja principal y ordena la lectura de izquierda a derecha. El resultado se normaliza a mayúsculas y sin separadores.
 
+El indicador `formato_valido` del módulo comprueba únicamente que el texto tenga más de cuatro caracteres; **no** es una validación estricta del formato español de matrícula.
 
-El código para entrenar YOLO desde CPU:
+### 2.6 Modelo de lenguaje visual
 
-```
-yolo detect train model=yolo11n.pt data=data/miarchivo.yml imgsz=416 batch=4 device=CPU epochs=40
-```
+**SmolVLM-500M-Instruct** se utiliza únicamente en la comparativa experimental de OCR. No forma parte del procesado final del vídeo. Su implementación está en `SmolVLM/matricula_SmolVLM.py` y su evaluador en `SmolVLM/evaluar_SmolVLM.py`.
 
-Si disponemos de GPU:
+### 2.7 Volcado de resultados
 
-```
-yolo detect train model=yolo11n.pt data=data/miarchivo.yml imgsz=416 batch=4 device=0[,1,2,3] epochs=40
-```
+Por cada detección y fotograma se escribe una fila en `<vídeo>_deteccion.csv` con estas columnas:
 
-Para entrenar con GPU, recordar que puede serte útil acceder a las instrucciones para [instalar pytorch local](https://pytorch.org/get-started/locally/) de cara a conocer el comando necesario para instalarlo en tu *environment*. Chequea la versión de CUDA en tu equipo, puede que tengas que buscar en el enlace para versiones previas de pytorch.
+| Columna | Contenido |
+|---|---|
+| `fotograma` | Índice del fotograma |
+| `tipo_objeto` | Clase detectada |
+| `confianza` | Confianza del detector general |
+| `identificador_tracking` | ID asignado por BoT-SORT |
+| `x1, y1, x2, y2` | Caja del objeto en el fotograma |
+| `matricula_en_su_caso` | `si` si se detectó matrícula |
+| `confianza_matricula` | Confianza del detector de matrículas |
+| `mx1, my1, mx2, my2` | Caja de la matrícula |
+| `texto_matricula` | Texto leído por EasyOCR |
 
+Además se genera `<vídeo>_resumen.csv` con los IDs únicos y el número total de detecciones por clase.
 
-<!--En mi equipo de despacho, donde ya tenía CUDA presente
+### 2.8 Visualización
 
-```
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+`dibujar_detecciones()` pinta la caja de cada objeto con un color por clase, su nombre, su ID y su confianza. Si el objeto tiene matrícula, añade la caja blanca de la matrícula y el texto reconocido. `dibujar_leyenda()` muestra en la esquina superior izquierda el número de IDs únicos por clase.
 
-No fue
+El vídeo se escribe con OpenCV en formato MP4 (`mp4v`) a la resolución y FPS del vídeo original.
 
-conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
+### 2.9 Privacidad
 
-se queja de openssl
+Antes de dibujar y guardar cada fotograma se pixelan las cajas de las personas y de las matrículas. El detalle se explica en el [apartado 7](#7-privacidad).
 
-Con yolov7 usé
-conda install pytorch==1.12.1 torchvision==0.13.1 torchaudio==0.12.1 cudatoolkit=11.6 -c pytorch -c conda-forge
+---
 
-```
+## 3. Entrenamiento del modelo YOLO
 
+### 3.1 Modelo elegido
 
- Error OpenSSL https://github.com/conda/conda/issues/11982
-go to location where you've install anaconda anaconda3>Library>bin. search and copy following dll files
+Se parte de **YOLO11n** (`yolo11n.pt`), la variante más pequeña de la familia YOLO11. La elección se debe a que:
 
-libcrypto-1_1-x64.dll
-libssl-1_1-x64.dll
+- Es un modelo **preentrenado en COCO**, por lo que ya conoce formas y texturas generales.
+- Tiene un coste computacional bajo, adecuado para procesar vídeo.
+- Es suficientemente preciso para un dataset pequeño y específico como el de matrículas.
+- Ultralytics facilita el entrenamiento, la inferencia y el *tracking* en el mismo entorno.
 
-and paste to anaconda3>DLLs.
+### 3.2 Aprendizaje por transferencia
 
-then restart your pc.
+El entrenamiento no parte de cero: se carga `yolo11n.pt` con pesos de COCO y se ajusta con las imágenes de matrículas. Este proceso, conocido como *transfer learning*, permite aprovechar las características visuales ya aprendidas (bordes, contrastes, formas) y necesita muchas menos imágenes y épocas que un entrenamiento desde cero.
 
-issue will get resolved. This will solve the issue. Thank you Mahesh2519
--->
+El modelo resultante se guarda como `best.pt`, que es el que utiliza el *pipeline* final.
 
-El entrenamiento puede llevarse a cabo en CPU, siendo sensiblemente más lento que si contamos con GPU. También es posible hacer uso de Colab  [tutorial para ejecutar en Colab](https://machinelearningprojects.net/train-yolov7-on-the-custom-dataset/).
-Finalizado el entreno localmente, en la carpeta *runs/detect/trainX* se encuentra el resultado. Ya estarías en disposición de probarlo, desde línea de comando o en tu propio código.
+### 3.3 Dataset
 
-Además, una vez finalizado el entrenamiento, se generarán en la carpeta *runs* una serie de gráficas que nos permitirá comprobar que tal ha ido el entrenamiento. Recomendamos, si no tarda demasiado en entrenar cada modelo, realizar el entrenamiento varias veces con uno o varios modelos y después comparar estas métricas para escoger el que mejor comportamiento haya demostrado.
+El dataset está en `datos/dataset_limpio/` y sigue el formato YOLO:
 
-
-## 4.5 RT-DETR
-
-Aunque recomendamos el uso de YOLO y Ultralytics debido a su sencillez y extensivo uso en la literatura, recientes versiones han realizado un cambio que esta motivando la migración de muchas de estas aplicaciones a otros modelos de detección. En los últimos años, ultralytics ha modificado su licencia a AGPL-3.0, significando que si quisieras hacer una aplicación comercial usando sus modelos, deberías o mantener todo el código de tu aplicación en abierto, cosa no siempre posible, o comprar la licencia de pago. Debido a esto, y a la reciente aparición de otras arquitecturas, parte de la industria esta optando por no hacer uso de Ultralytics y migrar a otros modelos, especialmente a RT-DETR. Para más información sobre la licencia pueden acceder a [la página correspondiente de Ultralytics.](https://www.ultralytics.com/es/license)
-
-RT-DETR es un modelo de detección desarrollado por Baidu, una empresa china de tecnología, publicado en 2023 bajo licencia Apache 2.0, permitiendo así un uso comercial. En el [artículo](https://arxiv.org/abs/2304.08069) donde se publica inicialmente, presentan unos resultados donde los modelos de la familia RT-DETR superaban en rendimiento a los de la familia YOLO. En lo relativo a la arquitectura, la mayor diferencia entre ambos es que RT-DETR está construido usando Transformers.
-
-En cuanto a su uso, RT-DETR, se puede entrenar y usar como cualquier otro modelo construido en pytorch, dejamos por aquí el enlace al [Github para su uso](https://github.com/lyuwenyu/RT-DETR). Además, hemos subido el cuaderno *VC_P4_RTDETR.ipynb* con algunos ejemplos mínimos de su uso, incluidos los pasos de descarga de los modelos e instalación. En principio, con añadir al environment de YOLO las siguientes dos librerías debería funcionar todo:
-
-```
-pip install tensorboard
-pip install faster_coco_eval
-```
-
-![RT-DETR](images/rtdetr2l-detection.png)  
-*Resultado del modelo RT-DETR v2-L en la imagen test.jpg*
-
-## 4.6 Entrega
-
-Para la primera entrega de esta práctica, la tarea consiste en desarrollar un prototipo que procese el [vídeo ejemplo proporcionado](https://alumnosulpgc-my.sharepoint.com/:v:/g/personal/mcastrillon_iusiani_ulpgc_es/EXRsnr4YuQ9CrhcekTPAD8YBMHgn16KwlunFg32iZM0xVQ?e=kzuw4l):
-
-- detecte y siga las personas y vehículos presentes
-- detecte las matrículas de los vehículos presentes
-- cuente el total de cada clase
-- vuelque a disco un vídeo que visualice los resultados
-- genere un archivo csv con el resultado de la detección y seguimiento. Se sugiere un formato con al menos los siguientes campos:
-
-```
-fotograma, tipo_objeto, confianza, identificador_tracking, x1, y1, x2, y2, matrícula_en_su_caso, confianza, mx1,my1,mx2,my2, texto_matricula
+```text
+datos/dataset_limpio/
+├── data.yaml
+├── train/
+│   ├── images/
+│   └── labels/
+├── valid/
+│   ├── images/
+│   └── labels/
+└── test/
+    ├── images/
+    └── labels/
 ```
 
-La **entrega del cuaderno o cuadernos** se hace efectiva a través del campus virtual por medio de un **enlace github**. Además del **archivo README**, debe incluirse el resultado del vídeo proporcionado como test (o enlace al mismo), y el correspondiente archivo *csv*. En el caso de entrenarse algún detector, por ejemplo de matrículas, debe proporcionarse acceso al conjunto de datos y analizar el proceso de entrenamiento (evolución de la función de pérdida, métricas...)
+| Split | Imágenes | Etiquetas | Objetos de matrícula |
+|---|---:|---:|---:|
+| Train | 151 | 151 | — |
+| Valid | 28 | 28 | — |
+| Test | 31 | 31 | — |
+| **Total** | **210** | **210** | **217** |
 
+El conjunto tiene **una única clase**: `License Plate`. Procede de dos exportaciones de Roboflow (`Total License Plates` y `License plates 2`) combinadas y revisadas manualmente. La configuración `data.yaml` no fija una ruta absoluta, por lo que el dataset funciona en cualquier equipo.
 
-Se considerarán extras:
+La validación con `validar_dataset.py` confirma que las 210 imágenes tienen etiqueta, que todas las líneas tienen cinco valores y que las coordenadas están normalizadas en `[0, 1]`.
 
-- Determine el flujo de personas y vehículos en el vídeo de test en distintas direcciones (vehículos que dejan la imagen por la derecha, por la izquierda, etc.) (+0.25p)
-- Evaluar dos alternativas para la detección de matrículas: una basada en YOLO y otra en RT-DETR (+1p).
-- Evaluar la detección de matrículas usando técnicas basadas en contornos (+0.25p)
-- Anonimizar a las personas y vehículos presentes en un vídeo (+0.25p).
+### 3.4 Parámetros de entrenamiento
 
+El entrenamiento se ejecutó en un cuaderno de Google Colab con GPU. La llamada real es:
 
+```python
+model = YOLO("yolo11n.pt")
+model.train(
+    data=DATASET,
+    epochs=60,
+    imgsz=640,
+    batch=4,
+    device=0,
+    project="/content/drive/MyDrive/VC/P4/salida",
+    name="yolo_matriculas",
+)
+```
 
+| Parámetro | Valor | Significado y motivo |
+|---|---:|---|
+| `epochs` | 60 | Número de pasadas completas por el conjunto de entrenamiento. Con 151 imágenes es suficiente para converger sin alargar innecesariamente el entrenamiento. |
+| `imgsz` | 640 | Resolución de entrada. Es el valor estándar de YOLO y conserva suficiente detalle en matrículas pequeñas. |
+| `batch` | 4 | Imágenes procesadas por paso. Un lote pequeño se ajusta a la memoria disponible de la GPU de Colab, que es el recurso limitante. |
+| `device` | 0 | Primera GPU disponible. El cuaderno comprueba previamente la GPU con `nvidia-smi`. |
+| `project` / `name` | `.../salida`, `yolo_matriculas` | Carpeta donde Ultralytics guarda pesos, métricas y gráficas. |
 
-***
-Bajo licencia de Creative Commons Reconocimiento - No Comercial 4.0 Internacional
+No se fijó un optimizador manual: Ultralytics utiliza su configuración automática por defecto. El dataset se copia desde Google Drive a `/content/datos` antes de entrenar, y los resultados se guardan de nuevo en Drive.
+
+El cuaderno utilizado se conserva en [`resultados entrenamiento/entrenamiento_matriculas.ipynb`](resultados%20entrenamiento/entrenamiento_matriculas.ipynb).
+
+---
+
+## 4. Resultados del entrenamiento
+
+La siguiente gráfica la genera Ultralytics al finalizar el entrenamiento y resume las pérdidas y las métricas de las 60 épocas:
+
+![Gráficas del entrenamiento de YOLO: pérdidas y métricas por época](resultados%20entrenamiento/results.png)
+
+*Figura 1. Evolución de las pérdidas de entrenamiento y validación (box, cls y dfl) y de las métricas Precision, Recall, mAP50 y mAP50-95.*
+
+### 4.1 Qué muestra cada panel
+
+- **`train/box_loss` y `val/box_loss`:** error de localización de la caja. Mide cuánto se desvían las coordenadas predichas de las reales.
+- **`train/cls_loss` y `val/cls_loss`:** error de clasificación. En este dataset solo hay una clase, pero el modelo sigue aprendiendo a distinguir matrícula de fondo.
+- **`train/dfl_loss` y `val/dfl_loss`:** *Distribution Focal Loss*, pérdida específica de YOLO que refina los bordes de la caja.
+- **Precision:** de todas las cajas que el modelo dice que son matrículas, qué proporción lo son realmente.
+- **Recall:** de todas las matrículas reales, qué proporción detecta el modelo.
+- **mAP50:** precisión media calculada con un umbral de solapamiento (IoU) de 0.5.
+- **mAP50-95:** precisión media promediada con umbrales de IoU de 0.5 a 0.95. Es la métrica más exigente y la que mejor refleja la calidad de la localización.
+
+### 4.2 Evolución observada
+
+- En la **época 1** el modelo ya alcanza un mAP50 de 0.485, gracias a los pesos preentrenados.
+- En la **época 2** hay una caída puntual (Recall 0.129, mAP50 0.196), habitual al inicio del ajuste.
+- A partir de la **época 3** la mejora es rápida y sostenida (mAP50 0.857).
+- Entre las épocas **20 y 50** las pérdidas de validación descienden más lentamente y las métricas mejoran en pasos pequeños; a partir de la época **50** las curvas se aplanan.
+- El mejor resultado se obtiene en la **época 51**.
+
+### 4.3 Resultados finales
+
+| Métrica | Época 60 (final) | Mejor época (51, por mAP50-95) |
+|---|---:|---:|
+| Precision | 0.963 | 0.962 |
+| Recall | 0.935 | 0.935 |
+| mAP50 | 0.972 | **0.984** |
+| mAP50-95 | 0.746 | **0.760** |
+
+Pérdidas al final del entrenamiento:
+
+| Pérdida | Entrenamiento | Validación |
+|---|---:|---:|
+| Box | 0.667 | 0.829 |
+| Cls | 0.436 | 0.529 |
+| DFL | 0.921 | 0.970 |
+
+### 4.4 ¿Hay sobreajuste?
+
+Las pérdidas de entrenamiento son algo menores que las de validación, algo normal. Lo importante es que **ambas siguen una tendencia descendente y se estabilizan**, sin que la validación empiece a subir mientras el entrenamiento baja. No se observa, por tanto, un sobreajuste claro.
+
+Las métricas finales son ligeramente inferiores a las de la época 51 (mAP50-95 0.746 frente a 0.760), una diferencia pequeña que entra dentro de la variabilidad normal. Hay que tener en cuenta que el conjunto de validación tiene solo **28 imágenes**, por lo que pequeñas diferencias de una o dos detecciones mueven bastante el porcentaje.
+
+En conjunto, el modelo detecta matrículas con **precisión 0.963, recall 0.935 y mAP50 0.972**, unos resultados muy buenos para un dataset de este tamaño. El peso utilizado en el sistema final es el mejor *checkpoint* guardado por Ultralytics (`best.pt`).
+
+---
+
+## 5. Comparativa de modelos OCR
+
+### 5.1 Modelos evaluados
+
+Se comparan dos enfoques distintos:
+
+- **EasyOCR:** OCR clásico basado en redes neuronales convolucionales y recurrentes. Detecta las cajas de texto y reconoce los caracteres.
+- **SmolVLM-500M-Instruct:** modelo de lenguaje visual de 500 millones de parámetros. Recibe la imagen del recorte y genera el texto de la matrícula como respuesta.
+
+### 5.2 Metodología
+
+La comparativa se implementa en `comparativa/comparar_ocr_smolvlm.py`. El script:
+
+1. Ejecuta el evaluador de EasyOCR (`OCR/evaluar_ocr.py`).
+2. Ejecuta el evaluador de SmolVLM (`SmolVLM/evaluar_SmolVLM.py`).
+3. Comprueba que ambos han procesado **exactamente las mismas 217 imágenes** y con las mismas etiquetas reales.
+4. Genera `comparativa.csv`, `detalle_comparativa.csv` y las cuatro gráficas.
+
+El conjunto de evaluación es `datos/matriculas_recortadas/ocr_dataset.csv`, con 217 recortes de matrícula y su texto real. Ambos modelos reciben la misma imagen y se evalúan con el mismo criterio.
+
+Métricas utilizadas:
+
+- **Accuracy exacta:** porcentaje de matrículas en las que la predicción coincide completamente con la etiqueta.
+- **CER (Character Error Rate):** proporción de caracteres editados (inserciones, borrados o sustituciones) respecto al total de caracteres reales. Cuanto menor, mejor.
+- **Accuracy por carácter:** porcentaje de caracteres correctos.
+- **Lecturas vacías:** imágenes en las que el modelo no devuelve ningún texto.
+- **Tiempo medio por imagen:** coste de inferencia.
+
+La comparativa se ejecutó en **CPU** (`dispositivo = cpu`), sin GPU. El equipo de trabajo es un AMD Ryzen 7 5825U con 31,4 GB de RAM y Windows 11.
+
+### 5.3 Accuracy exacta
+
+![Comparativa de accuracy exacta entre EasyOCR y SmolVLM](comparativa/resultados/comparativa_accuracy.png)
+
+*Figura 2. Porcentaje de matrículas leídas correctamente por cada modelo sobre las mismas 217 imágenes.*
+
+SmolVLM acierta **191 de 217** matrículas (**88,02 %**), frente a **146 de 217** de EasyOCR (**67,28 %**). La diferencia es de **20,74 puntos porcentuales**, equivalente a 45 matrículas más leídas correctamente. Es la ventaja más clara del VLM.
+
+### 5.4 CER global
+
+![Comparativa del Character Error Rate entre EasyOCR y SmolVLM](comparativa/resultados/comparativa_cer.png)
+
+*Figura 3. CER global. Un valor menor indica menos errores de caracteres.*
+
+SmolVLM tiene un CER de **7,93 %** y EasyOCR de **10,88 %**. SmolVLM no solo acierta más matrículas completas, sino que cuando falla suele quedar más cerca del texto correcto. La reducción relativa del error es de aproximadamente un 27 %.
+
+### 5.5 Tiempo de inferencia
+
+![Comparativa del tiempo medio por imagen entre EasyOCR y SmolVLM](comparativa/resultados/comparativa_tiempos.png)
+
+*Figura 4. Tiempo medio de procesamiento por recorte de matrícula.*
+
+EasyOCR tarda **1,40 s por imagen** y SmolVLM **14,18 s por imagen**, unas **10 veces más**. En total, EasyOCR necesitó 304,7 s para las 217 imágenes y SmolVLM 3.077,6 s (alrededor de 51 minutos).
+
+En un vídeo con varias matrículas por fotograma, 14 segundos por recorte harían inviable el procesamiento en tiempo razonable con CPU.
+
+### 5.6 Lecturas vacías
+
+![Comparativa del porcentaje de lecturas vacías entre EasyOCR y SmolVLM](comparativa/resultados/comparativa_vacios.png)
+
+*Figura 5. Porcentaje de imágenes en las que el modelo no devuelve ningún texto.*
+
+EasyOCR deja **7 imágenes sin leer (3,23 %)**, mientras que SmolVLM siempre devuelve alguna predicción (**0 %**). Que SmolVLM no deje lecturas vacías no significa que sea perfecto: en algunos casos genera texto degenerado o repeticiones, que cuentan como error aunque la salida no esté vacía.
+
+### 5.7 Resumen numérico
+
+| Métrica | EasyOCR | SmolVLM |
+|---|---:|---:|
+| Imágenes procesadas | 217 | 217 |
+| Aciertos exactos | 146 | **191** |
+| Accuracy exacta | 67,28 % | **88,02 %** |
+| Accuracy por carácter | 89,12 % | **92,07 %** |
+| Errores de carácter | 166 | **121** |
+| CER global | 10,88 % | **7,93 %** |
+| Lecturas vacías | 7 (3,23 %) | **0 (0 %)** |
+| Tiempo total | **304,7 s** | 3.077,6 s |
+| Tiempo medio por imagen | **1,40 s** | 14,18 s |
+
+### 5.8 Análisis de los fallos
+
+Del detalle por imagen se observa que:
+
+- **18 imágenes fallan con ambos modelos**: son los casos más difíciles (baja resolución, ángulo, oclusión o desenfoque).
+- **53 imágenes falla solo EasyOCR** y SmolVLM las resuelve.
+- **8 imágenes falla solo SmolVLM** y EasyOCR las acierta.
+
+Los errores de EasyOCR son principalmente caracteres espurios al inicio del texto, confusiones entre caracteres similares (`M/N`, `V/W`, `H/K`, `0/O`, `8/B`) y lecturas parciales o vacías. Los errores de SmolVLM, menos frecuentes, suelen ser la sustitución de un único carácter y, en algún caso, una salida degenerada.
+
+La confianza de EasyOCR resulta informativa: su media es **0,797** global, **0,887** en los aciertos y **0,612** en los fallos, por lo que podría usarse para filtrar predicciones poco fiables.
+
+### 5.9 Elección para el sistema final
+
+Para el procesamiento de vídeo se elige **EasyOCR**:
+
+- Es **unas 10 veces más rápido**, lo que permite procesar muchos fotogramas y varias matrículas por fotograma.
+- Su precisión es menor, pero suficiente para el objetivo del prototipo y coherente con el coste temporal.
+- Ya está integrado en `deteccion_video.py` y no añade la sobrecarga de un modelo de lenguaje visual.
+
+**SmolVLM** ofrece el mejor resultado en precisión y sería preferible en un escenario **offline**, donde se pudieran procesar pocos recortes con calma o solo los fotogramas seleccionados. Para vídeo completo en CPU, su coste lo descarta como OCR principal.
+
+---
+
+## 6. Modelos utilizados en el sistema final
+
+| Modelo | Archivo / ubicación | Función | ¿Se usa en el flujo final? |
+|---|---|---|---|
+| YOLO11n COCO | `yolo11n.pt` | Detección de personas y vehículos | **Sí** |
+| BoT-SORT | Configuración de Ultralytics | Seguimiento con IDs | **Sí** |
+| YOLO11n de matrículas | `best.pt` | Detección de matrículas | **Sí** |
+| EasyOCR | `OCR/matricula_ocr.py` | Lectura del texto de la matrícula | **Sí** |
+| SmolVLM-500M-Instruct | `SmolVLM/` | Comparativa de OCR | No |
+| RT-DETR | `RT-DETR/` | Alternativa experimental al detector | No |
+
+### 6.1 Justificación
+
+- **YOLO11n COCO:** modelo ligero y preentrenado, con las clases COCO necesarias para personas y vehículos. Permite además usar BoT-SORT con muy poca integración.
+- **best.pt:** detector especializado entrenado con el dataset propio. Es el único modelo que localiza matrículas; sin él, el OCR no tendría recortes sobre los que trabajar.
+- **BoT-SORT:** aporta identidad temporal a las detecciones, necesaria para contar IDs únicos y mantener la coherencia entre fotogramas.
+- **EasyOCR:** OCR razonablemente preciso y mucho más rápido que el VLM, adecuado para vídeo.
+- **SmolVLM:** se utiliza solo para medir hasta dónde se puede llegar en precisión con un VLM. No se integra por su coste por imagen.
+- **RT-DETR:** se exploró como alternativa de detección, pero no forma parte del sistema final ni de la comparativa de matrículas.
+
+El archivo `yolo11n-pose.pt` también está presente en la carpeta, pero **no se utiliza** en el *pipeline* implementado.
+
+---
+
+## 7. Privacidad
+
+### 7.1 Objetivo
+
+El vídeo procesado debe poder compartirse sin exponer la identidad de las personas ni el texto de las matrículas. El pixelado no es un efecto de la ventana de visualización: se aplica al fotograma **antes de escribirlo**, por lo que queda incorporado al archivo MP4 guardado.
+
+### 7.2 Qué se pixela
+
+Se pixelan dos tipos de regiones:
+
+1. **Personas:** cajas de las detecciones cuya clase es `0` (`person`), comprobada en `CLASS_NAMES`.
+2. **Matrículas:** cajas de las matrículas detectadas dentro de cada vehículo (`det.matricula.bbox`), ya en coordenadas del fotograma completo.
+
+No se pixela el vehículo completo ni el resto de la escena.
+
+### 7.3 Cómo se implementa
+
+La funcionalidad está en `pixelear.py`, con dos funciones reutilizables:
+
+- `pixelar_region(imagen, caja, bloque=None)`: pixela una sola región.
+- `pixelar_cajas(imagen, cajas, bloque=None)`: pixela una lista de regiones.
+
+El algoritmo es:
+
+1. Recortar la región indicada por la caja.
+2. Reducirla a una rejilla muy pequeña con interpolación `INTER_AREA`.
+3. Volver a ampliarla al tamaño original con interpolación `INTER_NEAREST`.
+
+Al reducir y ampliar sin suavizado se destruye el detalle fino: desaparecen los caracteres de la matrícula y los rasgos faciales, pero se conserva la silueta y el color medio de la zona.
+
+El tamaño de bloque se calcula automáticamente como:
+
+```python
+bloque = max(8, min(alto_region, ancho_region) // 6)
+```
+
+Es decir, como mínimo 8 píxeles y, en regiones grandes, una sexta parte del lado menor. Esto produce un pixelado suficientemente grueso sin invadir zonas vecinas.
+
+### 7.4 Tratamiento de coordenadas
+
+Antes de pixelar, cada caja se convierte a enteros y se recorta a los límites de la imagen:
+
+- Coordenadas negativas se llevan a `0`.
+- Coordenadas mayores que el ancho o el alto se limitan a la dimensión correspondiente.
+- Cajas invertidas, vacías o completamente fuera de la imagen se ignoran.
+- Si no hay detecciones, la lista está vacía y el fotograma continúa sin cambios.
+
+Esto evita errores con detecciones parcialmente fuera del encuadre, algo frecuente en los bordes del vídeo.
+
+### 7.5 Momento de aplicación
+
+Dentro del bucle principal de `deteccion_video.py` el orden es:
+
+```python
+detecciones = detectar(model_clases, model_matriculas, frame)
+# ... escritura de filas en el CSV ...
+
+# Privacidad: el OCR ya se ha hecho sobre el fotograma original.
+frame = pixelar_cajas(frame, cajas_privacidad(detecciones))
+
+dibujar_detecciones(frame, detecciones)
+dibujar_leyenda(frame, ids_por_clase)
+writer.write(frame)
+```
+
+Así se garantiza que:
+
+- El OCR trabaja sobre la imagen **original**, sin pixelar, y por tanto puede leer la matrícula.
+- El CSV conserva las coordenadas y el texto reconocido.
+- El vídeo guardado contiene el pixelado, porque se aplica antes de `writer.write()`.
+
+### 7.6 Intensidad y comprobaciones
+
+Con un fotograma real del vídeo de ejemplo se comprobó que:
+
+- Una matrícula de 48 × 13 píxeles pasó de **445 colores únicos a 6**.
+- Una persona de 41 × 229 píxeles pasó de **4.999 colores únicos a 139**.
+- Las zonas fuera de las cajas quedaron **idénticas** al fotograma original.
+
+También se probaron cajas con coordenadas negativas, cajas totalmente fuera de la imagen, cajas invertidas y listas vacías, sin errores y sin modificar zonas no afectadas. Por último, se guardó un fotograma pixelado en un MP4 y se volvió a leer: la matrícula conservaba el efecto de pixelado tras la codificación (328 colores únicos en el original codificado frente a 75 en la versión pixelada).
+
+### 7.7 Limitaciones
+
+- El pixelado se aplica a las cajas detectadas: si un detector no ve una persona o una matrícula, esa región no se pixela. La privacidad depende, por tanto, de la calidad de la detección.
+- El texto reconocido se sigue dibujando encima de la matrícula pixelada porque es un requisito de la entrega de OCR. El pixelado oculta la imagen de la matrícula, pero el texto leído aparece en el vídeo y en el CSV.
+- El CSV no está anonimizado: contiene el texto de las matrículas y las coordenadas.
+
+---
+
+## 8. Conclusiones
+
+### 8.1 Resultados obtenidos
+
+- El detector de matrículas alcanza **Precision 0.963**, **Recall 0.935**, **mAP50 0.972** y **mAP50-95 0.746** al final del entrenamiento, con un máximo de mAP50-95 de **0.760** en la época 51.
+- El *pipeline* completo detecta personas y vehículos, les asigna un ID de seguimiento, localiza matrículas, las lee con EasyOCR y vuelca todos los datos a CSV.
+- En la comparativa OCR, **SmolVLM es más preciso** (88,02 % frente a 67,28 % de accuracy exacta y CER 7,93 % frente a 10,88 %), pero **EasyOCR es unas 10 veces más rápido** (1,40 s frente a 14,18 s por imagen).
+- El vídeo guardado incorpora **pixelado de personas y matrículas**, aplicado antes de escribir cada fotograma.
+
+### 8.2 Puntos fuertes
+
+- Sistema completo de extremo a extremo: detección, *tracking*, OCR, CSV, vídeo y privacidad.
+- Buen rendimiento del detector de matrículas con un dataset pequeño.
+- Comparativa OCR rigurosa sobre las mismas 217 imágenes, con métricas complementarias (accuracy, CER, tiempos y lecturas vacías).
+- Privacidad integrada en el archivo final, sin dependencias nuevas y sin afectar al OCR.
+- Código modular: detector, OCR, comparativa y pixelado están separados.
+
+### 8.3 Limitaciones observadas
+
+- **Cobertura del OCR en vídeo:** en `VIDEO_EJEMPLO_deteccion.csv` hay 1.530 filas con matrícula detectada, pero solo **251 tienen texto** (16,4 %). Muchas lecturas son parciales o de un solo carácter. Es el punto más débil de la parte OCR.
+- **Vídeos sin texto:** las salidas de `video1`, `video6` y `video7` no contienen ningún texto de matrícula, probablemente por el tamaño, la distancia o la calidad de las matrículas en esos vídeos.
+- **Salida rota de `video4`:** `video4_deteccion.mp4` ocupa 258 bytes y su CSV tiene 0 filas, aunque el vídeo original tiene 58,9 MB. Es una ejecución incompleta que no se ha regenerado.
+- **Conjunto de validación pequeño:** solo 28 imágenes, por lo que las métricas tienen bastante variabilidad.
+- **OCR en CPU:** EasyOCR tarda alrededor de 1,4 s por recorte, lo que limita el procesamiento de vídeos largos.
+- **Opción `--no-show`:** está definida en `parse_args()`, pero `main()` fija `mostrar = True`, por lo que la ventana se abre igualmente. No se ha modificado para no alterar el comportamiento existente.
+- **Nombre fijo de anotaciones:** `anotar_matricula()` escribe siempre en `video4_matriculas_detectadas.txt`, independientemente del vídeo procesado.
+- **Privacidad dependiente de la detección:** una matrícula o persona no detectada no se pixela. Además, el texto OCR se dibuja sobre la matrícula pixelada y queda en el CSV.
+
+### 8.4 Mejoras futuras razonables
+
+- Filtrar las lecturas OCR por confianza y por formato, y descartar textos de un solo carácter.
+- Votar la matrícula a lo largo de varios fotogramas usando el ID de seguimiento del vehículo.
+- Añadir un modo de privacidad que también oculte el texto OCR superpuesto.
+- Evaluar el sistema con GPU para reducir el coste de EasyOCR y valorar SmolVLM en fotogramas seleccionados.
+- Ampliar y equilibrar el dataset de matrículas, especialmente con imágenes pequeñas, inclinadas y con poca luz.
+- Regenerar las salidas incompletas y comparar RT-DETR con YOLO en la detección de matrículas.
+
+---
+
+## 9. Ejecución
+
+### 9.1 Estructura relevante
+
+```text
+P4/
+├── deteccion_video.py              # pipeline completo de vídeo
+├── pixelear.py                     # pixelado de regiones
+├── validar_dataset.py              # validación del dataset YOLO
+├── best.pt                         # detector de matrículas entrenado
+├── yolo11n.pt                      # detector general COCO
+├── datos/
+│   ├── dataset_limpio/             # dataset de entrenamiento/validación/test
+│   └── matriculas_recortadas/      # 217 recortes para la comparativa OCR
+├── OCR/
+│   ├── matricula_ocr.py
+│   └── evaluar_ocr.py
+├── SmolVLM/
+│   ├── matricula_SmolVLM.py
+│   └── evaluar_SmolVLM.py
+├── comparativa/
+│   ├── comparar_ocr_smolvlm.py
+│   └── resultados/
+├── resultados entrenamiento/
+│   ├── entrenamiento_matriculas.ipynb
+│   ├── results.csv
+│   └── results.png
+├── salida/pruebas/                 # vídeos, CSV y resúmenes generados
+└── videos/                         # vídeos de entrada
+```
+
+### 9.2 Entorno probado
+
+| Componente | Versión |
+|---|---|
+| Sistema operativo | Windows 11 |
+| CPU | AMD Ryzen 7 5825U |
+| RAM | 31,4 GB |
+| Python | 3.9.21 |
+| PyTorch | 2.8.0+cpu |
+| Ultralytics | 8.4.183 |
+| OpenCV | 4.10.0 |
+| NumPy | 1.26.4 |
+
+El código establece `KMP_DUPLICATE_LIB_OK=TRUE` al inicio para evitar el conflicto de runtimes OpenMP que aparece en Windows al combinar PyTorch, NumPy y EasyOCR.
+
+### 9.3 Dependencias
+
+Las dependencias principales son:
+
+```powershell
+pip install ultralytics opencv-python easyocr numpy torch transformers pillow matplotlib
+```
+
+`ultralytics` incluye YOLO y BoT-SORT. `easyocr` se usa para el OCR final. `transformers` y `pillow` solo son necesarios para ejecutar la comparativa con SmolVLM.
+
+Los comandos siguientes deben ejecutarse con el intérprete del entorno donde estén instaladas estas dependencias (por ejemplo, activando antes el entorno con `conda activate VC_P4`).
+
+### 9.4 Procesar un vídeo
+
+Desde la raíz del repositorio:
+
+```powershell
+python P4/deteccion_video.py --video P4/videos/VIDEO_EJEMPLO.MP4
+```
+
+Para una prueba rápida con solo 100 fotogramas:
+
+```powershell
+python P4/deteccion_video.py --video P4/videos/VIDEO_EJEMPLO.MP4 --max-frames 100
+```
+
+El script abre una ventana de visualización; se puede cerrar con `q` o `Esc`. La opción `--no-show` está declarada pero actualmente no se aplica.
+
+Los resultados se guardan en `P4/salida/pruebas/`:
+
+- `<nombre>_deteccion.mp4`: vídeo anotado y con pixelado de privacidad.
+- `<nombre>_deteccion.csv`: una fila por detección y fotograma.
+- `<nombre>_resumen.csv`: IDs únicos y detecciones totales por clase.
+
+> **Importante:** los MP4 que ya están en `salida/pruebas/` se generaron antes de integrar el pixelado. Para obtener un vídeo con privacidad hay que volver a ejecutar el script; los archivos existentes no se han sobrescrito en esta entrega.
+
+### 9.5 Comparativa OCR
+
+Desde la raíz del repositorio:
+
+```powershell
+python P4/comparativa/comparar_ocr_smolvlm.py
+```
+
+El script ejecuta primero EasyOCR, después SmolVLM y finalmente genera la comparativa y las cuatro gráficas en `P4/comparativa/resultados/`. Es un proceso largo en CPU: aproximadamente 5 minutos para EasyOCR y 51 minutos para SmolVLM, sin contar la carga de modelos.
+
+> **Nota:** `OCR/README.md` indica una ruta antigua (`P4/comparativa ocr vs SmolVLM/comparar_ocr_smolvlm.py`) que no existe. La ruta correcta y verificada es `P4/comparativa/comparar_ocr_smolvlm.py`.
+
+### 9.6 Validar el dataset
+
+```powershell
+python P4/validar_dataset.py --data P4/datos/dataset_limpio/data.yaml
+```
+
+Comprueba la estructura de los splits, la existencia de etiquetas, el número de valores por línea, el rango de clases y la normalización de coordenadas. La última ejecución devolvió **DATASET VÁLIDO** con 151 imágenes de entrenamiento, 28 de validación, 31 de test y 217 objetos de matrícula.
+
+### 9.7 Reentrenar el modelo
+
+El entrenamiento se realiza desde el cuaderno de Google Colab:
+
+```text
+P4/resultados entrenamiento/entrenamiento_matriculas.ipynb
+```
+
+Requiere una GPU y que el dataset esté disponible en `/content/drive/MyDrive/VC/P4/datos`. El cuaderno copia el dataset a `/content/datos`, entrena con los parámetros del [apartado 3.4](#34-parámetros-de-entrenamiento) y guarda los resultados en Drive. No es un script pensado para ejecutarse localmente sin adaptar las rutas.
+
+---
+
+## Observaciones sobre archivos no incluidos en el flujo
+
+- La carpeta `RT-DETR/` contiene el repositorio externo de RT-DETR y sus variantes. Se mantiene como material de exploración, pero el sistema final no lo utiliza.
+- `yolo11n-pose.pt` está en `P4/`, pero no se carga desde `deteccion_video.py` ni interviene en la detección de personas.
+- Las salidas de `video4` están incompletas (vídeo de 258 bytes y CSV vacío) y no se han regenerado en esta entrega.

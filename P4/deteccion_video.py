@@ -11,13 +11,14 @@ from typing import Optional
 os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")
 
 from OCR.matricula_ocr import leer_matricula_easyocr
+from pixelear import pixelar_cajas
 
 import cv2
 from ultralytics import YOLO
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-SALIDA_DIR = os.path.join(BASE_DIR, "salida/pruebas")
+SALIDA_DIR = os.path.join(BASE_DIR, "salida/pixel")
 VENTANA = "Deteccion y seguimiento"
 
 CLASS_NAMES = {
@@ -26,6 +27,7 @@ CLASS_NAMES = {
 }
 CLASSES = list(CLASS_NAMES)
 VEHICULOS = {2, 3, 5, 7}
+CLASE_PERSONA = 0  # CLASS_NAMES[0] == "person"
 CLASE_MATRICULA = 100  # fuera del rango COCO para no colisionar
 NOMBRE_MATRICULA = "matricula"
 
@@ -133,6 +135,16 @@ def poner_texto(frame, texto, x, y, color):
                 cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2)
 
 
+def cajas_privacidad(detecciones):
+    cajas = []
+    for det in detecciones:
+        if det.clase == CLASE_PERSONA:
+            cajas.append(det.bbox)
+        if det.matricula:
+            cajas.append(det.matricula.bbox)
+    return cajas
+
+
 def dibujar_detecciones(frame, detecciones):
     for det in detecciones:
         x1, y1, x2, y2 = det.bbox
@@ -195,89 +207,105 @@ def escribir_resumen(ruta_resumen, ids_por_clase, detecciones_por_clase):
                 print(f"  {nombre:<12} IDs únicos: {unicos:<4} detecciones: {total}")
             w.writerow([nombre, unicos, total])
 
+def lista_de_videos():
+    return (
+        [os.path.join(BASE_DIR, "videos/VIDEO_EJEMPLO.MP4")]
+        + [os.path.join(BASE_DIR, f"videos/video{i}.mp4") for i in range(1, 7)]
+    )
 
 def main():
     args = parse_args()
-    mostrar = True
+    mostrar = False
 
-    os.makedirs(SALIDA_DIR, exist_ok=True)
-    nombre = os.path.splitext(os.path.basename(args.video))[0]
-    ruta_video_out = os.path.join(SALIDA_DIR, f"{nombre}_deteccion.mp4")
-    ruta_csv = os.path.join(SALIDA_DIR, f"{nombre}_deteccion.csv")
-    ruta_resumen = os.path.join(SALIDA_DIR, f"{nombre}_resumen.csv")
+    list_videos = lista_de_videos()
+    print(list_videos)
+    run(args, mostrar, list_videos)
 
-    vid = cv2.VideoCapture(args.video)
-    if not vid.isOpened():
-        print(f"ERROR: no se puede abrir el vídeo: {args.video}")
-        return 1
+def run(args, mostrar, videos):
 
-    ancho = int(vid.get(cv2.CAP_PROP_FRAME_WIDTH))
-    alto = int(vid.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    fps = vid.get(cv2.CAP_PROP_FPS) or 25.0
-    total_frames = int(vid.get(cv2.CAP_PROP_FRAME_COUNT))
-    print(f"Vídeo: {args.video}\n  {ancho}x{alto} @ {fps:.1f} fps, {total_frames} fotogramas")
+    for video in videos:
+        print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+        os.makedirs(SALIDA_DIR, exist_ok=True)
+        nombre = os.path.splitext(os.path.basename(video))[0]
+        ruta_video_out = os.path.join(SALIDA_DIR, f"{nombre}_deteccion.mp4")
+        ruta_csv = os.path.join(SALIDA_DIR, f"{nombre}_deteccion.csv")
+        ruta_resumen = os.path.join(SALIDA_DIR, f"{nombre}_resumen.csv")
 
-    writer = cv2.VideoWriter(ruta_video_out, cv2.VideoWriter_fourcc(*"mp4v"),
-                             fps, (ancho, alto))
-    if not writer.isOpened():
-        print(f"ERROR: no se puede crear el vídeo de salida: {ruta_video_out}")
-        vid.release()
-        return 1
+        vid = cv2.VideoCapture(video)
+        if not vid.isOpened():
+            print(f"ERROR: no se puede abrir el vídeo: {video}")
+            return 1
 
-    model_clases = YOLO(os.path.join(BASE_DIR, "yolo11n.pt"))
-    model_matriculas = YOLO(os.path.join(BASE_DIR, "best.pt"))
+        ancho = int(vid.get(cv2.CAP_PROP_FRAME_WIDTH))
+        alto = int(vid.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        fps = vid.get(cv2.CAP_PROP_FPS) or 25.0
+        total_frames = int(vid.get(cv2.CAP_PROP_FRAME_COUNT))
+        print(f"Vídeo: {video}\n  {ancho}x{alto} @ {fps:.1f} fps, {total_frames} fotogramas")
 
-    ids_por_clase = defaultdict(set)
-    detecciones_por_clase = defaultdict(int)
-    frame_idx = 0
+        writer = cv2.VideoWriter(ruta_video_out, cv2.VideoWriter_fourcc(*"mp4v"),
+                                fps, (ancho, alto))
+        if not writer.isOpened():
+            print(f"ERROR: no se puede crear el vídeo de salida: {ruta_video_out}")
+            vid.release()
+            return 1
 
-    if mostrar:
-        cv2.namedWindow(VENTANA, cv2.WINDOW_NORMAL)
-        cv2.resizeWindow(VENTANA, 1200, 700)
+        model_clases = YOLO(os.path.join(BASE_DIR, "yolo11n.pt"))
+        model_matriculas = YOLO(os.path.join(BASE_DIR, "best.pt"))
 
-    try:
-        with open(ruta_csv, "w", newline="", encoding="utf-8") as csv_file:
-            csv_writer = csv.DictWriter(csv_file, fieldnames=CABECERA_CSV, restval="")
-            csv_writer.writeheader()
+        ids_por_clase = defaultdict(set)
+        detecciones_por_clase = defaultdict(int)
+        frame_idx = 0
 
-            while args.max_frames is None or frame_idx < args.max_frames:
-                ret, frame = vid.read()
-                if not ret:
-                    print("Fin del vídeo o error de lectura.")
-                    break
+        if mostrar:
+            cv2.namedWindow(VENTANA, cv2.WINDOW_NORMAL)
+            cv2.resizeWindow(VENTANA, 1200, 700)
 
-                detecciones = detectar(model_clases, model_matriculas, frame)
+        try:
+            with open(ruta_csv, "w", newline="", encoding="utf-8") as csv_file:
+                csv_writer = csv.DictWriter(csv_file, fieldnames=CABECERA_CSV, restval="")
+                csv_writer.writeheader()
 
-                for deteccion in detecciones:
-                    detecciones_por_clase[deteccion.clase] += 1
-                    if deteccion.id is not None:
-                        ids_por_clase[deteccion.clase].add(deteccion.id)
-                    escribir_fila_csv(csv_writer, frame_idx, deteccion)
-
-                dibujar_detecciones(frame, detecciones)
-                dibujar_leyenda(frame, ids_por_clase)
-                writer.write(frame)
-
-                if mostrar:
-                    cv2.imshow(VENTANA, frame)
-                    if cv2.waitKey(1) & 0xFF in (27, ord("q")):
-                        print("Interrumpido por el usuario.")
+                while args.max_frames is None or frame_idx < args.max_frames:
+                    ret, frame = vid.read()
+                    if not ret:
+                        print("Fin del vídeo o error de lectura.")
                         break
 
-                frame_idx += 1
-                if frame_idx % 25 == 0:
-                    print(f"  fotograma {frame_idx}/{total_frames or '?'}")
-    finally:
-        vid.release()
-        writer.release()
-        if mostrar:
-            cv2.destroyAllWindows()
+                    detecciones = detectar(model_clases, model_matriculas, frame)
 
-    escribir_resumen(ruta_resumen, ids_por_clase, detecciones_por_clase)
-    print(f"\nVídeo de salida: {ruta_video_out}")
-    print(f"CSV de detecciones: {ruta_csv}")
-    print(f"CSV resumen: {ruta_resumen}")
-    return 0
+                    for deteccion in detecciones:
+                        detecciones_por_clase[deteccion.clase] += 1
+                        if deteccion.id is not None:
+                            ids_por_clase[deteccion.clase].add(deteccion.id)
+                        escribir_fila_csv(csv_writer, frame_idx, deteccion)
+
+                    frame = pixelar_cajas(frame, cajas_privacidad(detecciones))
+
+                    dibujar_detecciones(frame, detecciones)
+                    dibujar_leyenda(frame, ids_por_clase)
+                    writer.write(frame)
+
+                    if mostrar:
+                        cv2.imshow(VENTANA, frame)
+                        if cv2.waitKey(1) & 0xFF in (27, ord("q")):
+                            print("Interrumpido por el usuario.")
+                            break
+
+                    frame_idx += 1
+                    if frame_idx % 25 == 0:
+                        print(f"  fotograma {frame_idx}/{total_frames or '?'}")
+        finally:
+            vid.release()
+            writer.release()
+            if mostrar:
+                cv2.destroyAllWindows()
+
+        escribir_resumen(ruta_resumen, ids_por_clase, detecciones_por_clase)
+        print(f"\nVídeo de salida: {ruta_video_out}")
+        print(f"CSV de detecciones: {ruta_csv}")
+        print(f"CSV resumen: {ruta_resumen}")
+        print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+
 
 
 if __name__ == "__main__":
